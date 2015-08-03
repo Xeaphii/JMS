@@ -35,14 +35,15 @@
                 android:src="@drawable/ic_drawer"
                 android:scaleType="centerInside" />
 
-            <ImageButton
+            <Button
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/event_imageButton"
                 android:layout_centerVertical="true"
+                android:textColor="#fff"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/event"
+                android:text="Job/Offer"
                 android:background="@null"
                 android:scaleType="centerInside" />
 

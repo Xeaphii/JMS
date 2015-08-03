@@ -67,7 +67,7 @@ public class ProfileActivity extends ActionBarActivity {
     ActionBar actionBar;
     // used to store app title
     private CharSequence mTitle;
-    ImageButton eventbut;
+    Button eventbut;
     StorageSharedPref sharedStorage;
     // slide menu items
     private String[] navMenuTitles;

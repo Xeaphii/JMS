@@ -58,7 +58,7 @@ public class CreateventFragment extends Fragment {
     TextView event_start_time;
     TextView event_end_date_textview;
     TextView event_end_time_textview;
-    EditText event_content_edittext;
+    EditText event_content_edittext,PaymentJob;
     EditText event_name_edittext;
     TextView event_location_edittext;
     StorageSharedPref sharedStorage;
@@ -105,9 +105,11 @@ public class CreateventFragment extends Fragment {
         event_end_date_textview=(TextView)v.findViewById(R.id.event_end_date_textView);
         event_end_time_textview=(TextView)v.findViewById(R.id.event_end_time_textView);
         event_start=(TextView)v.findViewById(R.id.event_start_textView);
+
         event_start_time=(TextView)v.findViewById(R.id.event_start_time_textView);
         event_end_time_textview=(TextView)v.findViewById(R.id.event_end_time_textView);
         event_content_edittext=(EditText)v.findViewById(R.id.event_content_editText);
+        PaymentJob=(EditText)v.findViewById(R.id.job_payment_editText);
         event_name_edittext=(EditText)v.findViewById(R.id.event_name_editText);
         event_location_edittext=(TextView)v.findViewById(R.id.event_location_editText);
         event_location_edittext.setOnClickListener(new View.OnClickListener() {
@@ -300,9 +302,18 @@ public class CreateventFragment extends Fragment {
                 }
                 else {
                     if (isNetworkAvailable()) {
-                        new CreateEventJob(CreateventFragment.this.getActivity()).execute(new String[]{name_str,start_time_str,end_time_str,
-                                event_type,event_content_edittext.getText().toString(),"",event_location_edittext.getText().toString()
-                                ,"",position_latitude.toString(),position_longitude.toString(),sharedStorage.GetPrefs("user_id", null)});
+                        new CreateEventJob(CreateventFragment.this.getActivity()).execute(new String[]{
+                                name_str,
+                                start_time_str,
+                                end_time_str,
+                                event_type,
+                                PaymentJob.getText().toString(),
+                                event_content_edittext.getText().toString()
+                                ,""
+
+                                ,position_latitude.toString(),
+                                position_longitude.toString()
+                                ,sharedStorage.GetPrefs("user_id", null)});
                     }
                     else {
                         Toast.makeText(getActivity(), "No internet connection present", Toast.LENGTH_LONG).show();
@@ -375,28 +386,27 @@ public class CreateventFragment extends Fragment {
             try {
 
                 //------------------>>
-                String Url = "http://droidcube.move.pk/PHP/CreateEvent.php?eventNmae=" +
-                        encodeHTML(urls[0]) +
+                String Url = "http://droidcube.move.pk/JMS/CreateJob.php?eventNmae=" +
+                        encodeHTML(urls[0]).replaceAll(" ", "%20") +
                         "&eventTimestart=" +
-                        encodeHTML(urls[1]) +
+                        encodeHTML(urls[1]).replaceAll(" ", "%20") +
                         "&eventTimeend=" +
-                        encodeHTML(urls[2])+
+                        encodeHTML(urls[2]).replaceAll(" ", "%20")+
                         "&eventType=" +
-                        encodeHTML(urls[3])+
+                        encodeHTML(urls[3]).replaceAll(" ", "%20")+
+                        "&payment=" +
+                        encodeHTML(urls[4]).replaceAll(" ", "%20") +
                         "&eventContente=" +
-                        encodeHTML(urls[4]) +
-                        "&eventLocation=" +
-                        encodeHTML(urls[5]) +
-                        "&eventPosition=" +
-                        encodeHTML(urls[6]) +
+                        encodeHTML(urls[5]).replaceAll(" ", "%20") +
                         "&eventUserimage=" +
-                        encodeHTML(urls[7]) +
+                        encodeHTML(urls[6]).replaceAll(" ", "%20") +
                         "&position_latitude=" +
-                        encodeHTML(urls[8]) +
+                        encodeHTML(urls[7]).replaceAll(" ", "%20") +
                         "&position_longitude=" +
-                        encodeHTML(urls[9]) +
+                        encodeHTML(urls[8]).replaceAll(" ", "%20") +
                         "&userid=" +
-                        encodeHTML(urls[10]);
+                        encodeHTML(urls[9]).replaceAll(" ", "%20");
+                Log.e("Error",Url);
                 HttpGet httppost = new HttpGet(Url.replaceAll(" ","%20")
                         );
                 HttpClient httpclient = new DefaultHttpClient();

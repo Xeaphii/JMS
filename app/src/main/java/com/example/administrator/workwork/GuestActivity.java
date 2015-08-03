@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -60,7 +60,7 @@ public class GuestActivity extends ActionBarActivity {
     // used to store app title
     private CharSequence mTitle;
     StorageSharedPref sharedStorage;
-    ImageButton event;
+    Button event;
     // slide menu items
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
@@ -79,7 +79,7 @@ public class GuestActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest);
 
-        event=(ImageButton)findViewById(R.id.event_guest_imageButton);
+        event=(Button)findViewById(R.id.event_guest_imageButton);
         guestlistView=(ListView)findViewById(R.id.guest_listView);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

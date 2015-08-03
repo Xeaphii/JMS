@@ -22,7 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +51,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
     ActionBar actionBar;
     // used to store app title
     private CharSequence mTitle;
-    ImageButton eventbut;
+    Button eventbut;
     // slide menu items
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
@@ -78,7 +78,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail_other);
-        eventbut=(ImageButton)findViewById(R.id.event_imageButton);
+        eventbut=(Button)findViewById(R.id.event_imageButton);
         eventbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
