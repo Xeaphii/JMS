@@ -44,6 +44,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -98,12 +99,8 @@ public class CreateventFragment extends Fragment {
         eventID =intent.getStringExtra("eventID");
 
         eventtypeitem = (Spinner)v. findViewById(R.id.event_type_spinner);
-        List<String> list = new ArrayList<String>();
-        list.add("Hang out");
-        list.add("Drinks");
-        list.add("Movie");
-        list.add("Games");
-        list.add("Sports");
+        List<String> list =  new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.jobs_type)));
+
         submit_event=(Button)v.findViewById(R.id.event_submint_button);
         event_end_date_textview=(TextView)v.findViewById(R.id.event_end_date_textView);
         event_end_time_textview=(TextView)v.findViewById(R.id.event_end_time_textView);

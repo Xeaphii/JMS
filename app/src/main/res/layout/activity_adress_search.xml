@@ -18,6 +18,27 @@
             android:singleLine="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
+        <LinearLayout
+            android:id="@+id/LinearLayout02"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_alignParentBottom="true">
+            <Button
+                android:id="@+id/create_event_event_list_button"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textColor="#ffffffff"
+                android:layout_weight="1" android:text="Create Job">
+            </Button>
+
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:entries="@array/jobs_type" />
+        </LinearLayout>
 
     </RelativeLayout>
 

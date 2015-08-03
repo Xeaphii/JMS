@@ -20,15 +20,30 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/relativeLayout">
 
-        <Button
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:id="@+id/LinearLayout02"
             android:layout_height="wrap_content"
-            android:text="Create Event"
-            android:id="@+id/create_event_event_list_button"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:background="@null"
-            android:textColor="#ffffffff" />
+            android:layout_width="fill_parent"
+            android:layout_alignParentBottom="true">
+            <Button
+                android:id="@+id/create_event_event_list_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textColor="#ffffffff"
+                android:layout_weight="1" android:text="Create Job">
+            </Button>
+            <Button
+                android:id="@+id/create_offer_list_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textColor="#ffffffff"
+                android:layout_weight="1"
+                android:text="Create Offer">
+            </Button>
+        </LinearLayout>
     </RelativeLayout>
 
 </RelativeLayout>

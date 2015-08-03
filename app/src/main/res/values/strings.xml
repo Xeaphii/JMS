@@ -69,6 +69,13 @@
         <item>App Settings</item>
         <item>Log Out</item>
     </string-array>
+    <string-array name="jobs_type">
+        <item>Creative</item>
+        <item>Technical</item>
+        <item>General Assistance</item>
+        <item>Labor</item>
+        <item>Other</item>
+    </string-array>
 
     <!-- Nav Drawer List Item Icons -->
     <!-- Keep them in order as the titles are in -->
