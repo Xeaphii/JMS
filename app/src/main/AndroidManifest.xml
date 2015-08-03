@@ -71,6 +71,11 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
+            android:name=".CreateOfferActivity"
+            android:label="@string/title_activity_event"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
             android:name=".DetailsEventActivity"
             android:isScrollContainer="false"
             android:label="@string/title_activity_event"

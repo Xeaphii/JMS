@@ -55,6 +55,13 @@ public class EventLIstFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        ((Button)v.findViewById(R.id.create_offer_list_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =new Intent(getActivity(),CreateOfferActivity.class);
+                startActivity(intent);
+            }
+        });
         eventlistView=(ListView)v.findViewById(R.id.event_listView);
         // Gets the MapView from the XML layout and creates it
         setRetainInstance(true);
