@@ -62,7 +62,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
     TextView event_time_textview;
     TextView event_location_textview;
     TextView event_description_textview;
-    Button edit_button;
+    TextView Titleview;
     Button cancle_button;
     Boolean isJoined = false;
 
@@ -91,113 +91,14 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
         eventID = b.getString("eventID");
 //        deleteobject = DetailsEventActivity.parseObject;
 //        Toast.makeText(getActivity(),eventID,Toast.LENGTH_LONG).show();
-
+        Titleview = (TextView) findViewById(R.id.textView_title);
         event_time_textview=(TextView)findViewById(R.id.event_time_textView);
         event_location_textview=(TextView)findViewById(R.id.event_location_textView);
         event_description_textview=(TextView)findViewById(R.id.event_content_textView);
-        edit_button=(Button)findViewById(R.id.join_button);
+
         sharedStorage = new StorageSharedPref(DetailsEventpublicActivity.this);
         cancle_button=(Button)findViewById(R.id.guest_button);
-        edit_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-
-//                ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
-//                query.include("user");
-//                query.getInBackground(eventID, new GetCallback<ParseObject>() {
-//                    public void done(ParseObject event, ParseException e) {
-//                        if (e == null) {
-//                            deleteobject = event;
-//                            users = (ArrayList<String>) deleteobject.get("users");
-//                            users.add(ParseUser.getCurrentUser().getObjectId());
-//                            deleteobject.put("users", users);
-//                            try {
-//                                deleteobject.save();
-//                            } catch (ParseException e1) {
-//                                e1.printStackTrace();
-//                            }
-//
-//
-////                    ParseFile image = (ParseFile) country.get("image");
-////                    image.saveInBackground();
-////                    photo = country;
-//                            ParseUser touser = deleteobject.getParseUser("user");
-//                            //
-//
-//
-//                            try {
-//                                ParseQuery<ParseObject> eventQuery = ParseQuery.getQuery("Guest");
-////                photosFromCurrentUserQuery.whereEqualTo("user", ParseUser.getCurrentUser());
-////                photosFromCurrentUserQuery.whereExists("image");
-//                                eventQuery.orderByDescending("createdAt");
-//                                eventQuery.include("user");
-//                                ob = eventQuery.find();
-//                                for (ParseObject eventlist : ob) {
-//                                    // Locate images in flag column
-//
-//
-//                                    ParseUser eventuser = eventlist.getParseUser("user");
-//
-//                                    if (eventuser.getObjectId().equals(touser.getObjectId())) {
-//                                        Guest_ob = eventlist;
-//
-//                                        ArrayList<String> follusers = new ArrayList<>();
-//                                        follusers = (ArrayList<String>) Guest_ob.get("users");
-//
-//
-//                                        follusers.add(ParseUser.getCurrentUser().getObjectId());
-////                                            Toast.makeText(DetailsEventpublicActivity.this,follusers.toString(),Toast.LENGTH_LONG).show();
-//                                        Guest_ob.put("users", follusers);
-//                                        Guest_ob.save();
-//
-//                                    }
-//                                    if (eventuser.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
-//                                        My_ob = eventlist;
-//
-//                                        ArrayList<String> follusers = new ArrayList<>();
-//                                        follusers = (ArrayList<String>) My_ob.get("users");
-//
-//
-//                                        follusers.add(touser.getObjectId());
-////                                            Toast.makeText(DetailsEventpublicActivity.this,follusers.toString(),Toast.LENGTH_LONG).show();
-//                                        My_ob.put("users", follusers);
-//                                        My_ob.save();
-//
-//                                    }
-//
-//
-//                                }
-//
-//
-//                            } catch (ParseException ex) {
-//                                Log.e("Error", e.getMessage());
-//                                ex.printStackTrace();
-//                            }
-//
-//
-//                            //
-//
-////                      imageLoader.DisplayImage(image.getUrl(), commentimageview);
-//
-//                        }
-//
-//                    }
-//                });
-
-                if (isNetworkAvailable()) {
-                    if(isJoined){
-                        new CancelJoining(DetailsEventpublicActivity.this).execute(new String[]{eventID,sharedStorage.GetPrefs("user_id",null)});
-                    }else{
-                        new JoinEvent(DetailsEventpublicActivity.this).execute(new String[]{eventID,sharedStorage.GetPrefs("user_id",null)});
-                    }
-
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "No internet connection present", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
         new CheckJoining(DetailsEventpublicActivity.this).execute(new String[]{eventID, sharedStorage.GetPrefs("user_id", null)});
 
         cancle_button.setOnClickListener(new View.OnClickListener() {
@@ -464,7 +365,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/PHP/EventDetails.php?proj_event_id=" +
+                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/EventDetails.php?proj_event_id=" +
                         encodeHTML(urls[0])).replaceAll(" ", "%20"));
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpResponse response = httpclient.execute(httppost);
@@ -494,9 +395,10 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
             }
             if(Resp!=null){
                 String[] RespData = Resp.split(":::");
-                event_time_textview.setText(RespData[2]+" - "+RespData[3]);
-                event_location_textview.setText(RespData[7]);
-                event_description_textview.setText(RespData[5]);
+                event_time_textview.setText(RespData[5]);
+                event_location_textview.setText(RespData[8]+","+RespData[9]);
+                event_description_textview.setText(RespData[6]);
+                Titleview.setText(RespData[1]);
             }
         }
     }
@@ -553,11 +455,11 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
             }
             if(Resp.equals("200")){
                 Toast.makeText(DetailsEventpublicActivity.this, "Event Join is succefully saved!", Toast.LENGTH_LONG).show();
-                edit_button.setText("unjoin");
+
                 isJoined = true;
             }else if(Resp.equals("404")){
                 Toast.makeText(DetailsEventpublicActivity.this, "Event already joined", Toast.LENGTH_LONG).show();
-                edit_button.setText("Join");
+
                 isJoined = false;
             }
 
@@ -614,10 +516,10 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
                 dialog.dismiss();
             }
             if(Resp.equals("200")){
-                edit_button.setText("unjoin");
+
                 isJoined = true;
             }else if(Resp.equals("404")){
-                edit_button.setText("Join");
+
                 isJoined = false;
             }
         }
@@ -674,11 +576,11 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
             }
             if(Resp.equals("200")){
                 Toast.makeText(getApplicationContext(),"Event Unjoined",Toast.LENGTH_LONG).show();
-                edit_button.setText("Join");
+
                 isJoined = false;
             }else if(Resp.equals("404")){
                 Toast.makeText(getApplicationContext(),"Event Unjoined unsuccessful",Toast.LENGTH_LONG).show();
-                edit_button.setText("unjoin");
+
                 isJoined = true;
             }
         }

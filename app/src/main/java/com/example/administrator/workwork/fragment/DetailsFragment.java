@@ -25,6 +25,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -36,6 +37,7 @@ public class DetailsFragment extends Fragment {
     Button edit_button;
     Button cancle_button;
     String eventID;
+    TextView Titleview;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class DetailsFragment extends Fragment {
 //        Toast.makeText(getActivity(),eventID,Toast.LENGTH_LONG).show();
 
         event_time_textview=(TextView)v.findViewById(R.id.event_time_textView);
+        Titleview = (TextView) v.findViewById(R.id.textView_title);
         event_location_textview=(TextView)v.findViewById(R.id.event_location_textView);
         event_description_textview=(TextView)v.findViewById(R.id.event_content_textView);
         edit_button=(Button)v.findViewById(R.id.edit_button);
@@ -102,7 +105,7 @@ public class DetailsFragment extends Fragment {
 
                 try {
                     //------------------>>
-                    HttpGet httppost = new HttpGet(("http://droidcube.move.pk/PHP/EventDetails.php?proj_event_id=" +
+                    HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/EventDetails.php?proj_event_id=" +
                             encodeHTML(urls[0])).replaceAll(" ", "%20") );
                     HttpClient httpclient = new DefaultHttpClient();
                     HttpResponse response = httpclient.execute(httppost);
@@ -132,9 +135,10 @@ public class DetailsFragment extends Fragment {
             }
             if(Resp!=null){
                 String[] RespData = Resp.split(":::");
-                event_time_textview.setText(RespData[2]+" - "+RespData[3]);
-                event_location_textview.setText(RespData[7]);
-                event_description_textview.setText(RespData[5]);
+                event_time_textview.setText(RespData[5]);
+                event_location_textview.setText(RespData[8]+","+RespData[9]);
+                event_description_textview.setText(RespData[6]);
+                Titleview.setText(RespData[1]);
             }
         }
     }
