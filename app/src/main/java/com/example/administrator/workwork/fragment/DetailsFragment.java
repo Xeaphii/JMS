@@ -179,7 +179,7 @@ public class DetailsFragment extends Fragment {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/PHP/DeleteEvent.php?proj_event_id=" +
+                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/DeleteEvent.php?proj_event_id=" +
                         encodeHTML(urls[0]) ).replaceAll(" ", "%20"));
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpResponse response = httpclient.execute(httppost);

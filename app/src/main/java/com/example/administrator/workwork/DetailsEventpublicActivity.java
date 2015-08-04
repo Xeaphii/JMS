@@ -105,9 +105,11 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 //                deleteobject.deleteInBackground();
-                Intent intent = new Intent(DetailsEventpublicActivity.this, GuestActivity.class);
-                intent.putExtra("EventId", eventID);
-                startActivity(intent);
+                if(isJoined){
+                    new CancelJoining(DetailsEventpublicActivity.this).execute(new String[]{eventID,sharedStorage.GetPrefs("user_id",null)});
+                }else{
+                    new JoinEvent(DetailsEventpublicActivity.this).execute(new String[]{eventID,sharedStorage.GetPrefs("user_id",null)});
+                }
             }
         });
         if (isNetworkAvailable()) {
@@ -423,7 +425,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/PHP/JoinEvent.php?proj_event_id=" +
+                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/JoinEvent.php?proj_event_id=" +
                         encodeHTML(urls[0]) +
                         "&proj_event_guest=" +
                         encodeHTML(urls[1])).replaceAll(" ", "%20") );
@@ -454,15 +456,14 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
                 dialog.dismiss();
             }
             if(Resp.equals("200")){
-                Toast.makeText(DetailsEventpublicActivity.this, "Event Join is succefully saved!", Toast.LENGTH_LONG).show();
-
+                Toast.makeText(DetailsEventpublicActivity.this, "Job entry saved!", Toast.LENGTH_LONG).show();
+                cancle_button.setText("Cancel Job");
                 isJoined = true;
             }else if(Resp.equals("404")){
-                Toast.makeText(DetailsEventpublicActivity.this, "Event already joined", Toast.LENGTH_LONG).show();
-
+                Toast.makeText(DetailsEventpublicActivity.this, "Already enlisted in job", Toast.LENGTH_LONG).show();
+                cancle_button.setText("Cancel Job");
                 isJoined = false;
             }
-
         }
     }
     class CheckJoining extends AsyncTask<String, Void,String  > {
@@ -485,7 +486,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/PHP/CheckJoining.php?proj_event_id=" +
+                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/CheckJoining.php?proj_event_id=" +
                         encodeHTML(urls[0]) +
                         "&proj_event_guest=" +
                         encodeHTML(urls[1])).replaceAll(" ", "%20") );
@@ -516,10 +517,10 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
                 dialog.dismiss();
             }
             if(Resp.equals("200")){
-
+                cancle_button.setText("Cancel Job");
                 isJoined = true;
             }else if(Resp.equals("404")){
-
+                cancle_button.setText("Interested");
                 isJoined = false;
             }
         }
@@ -544,7 +545,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/PHP/CancelJoining.php?proj_event_id=" +
+                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/CancelJoining.php?proj_event_id=" +
                         encodeHTML(urls[0]) +
                         "&proj_event_guest=" +
                         encodeHTML(urls[1])).replaceAll(" ", "%20") );
@@ -575,12 +576,12 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
                 dialog.dismiss();
             }
             if(Resp.equals("200")){
-                Toast.makeText(getApplicationContext(),"Event Unjoined",Toast.LENGTH_LONG).show();
-
+                Toast.makeText(getApplicationContext(),"Job left successfull",Toast.LENGTH_LONG).show();
+                cancle_button.setText("Interested");
                 isJoined = false;
             }else if(Resp.equals("404")){
-                Toast.makeText(getApplicationContext(),"Event Unjoined unsuccessful",Toast.LENGTH_LONG).show();
-
+                Toast.makeText(getApplicationContext(),"Job leftunsuccessful",Toast.LENGTH_LONG).show();
+                cancle_button.setText("Cancel Job");
                 isJoined = true;
             }
         }
