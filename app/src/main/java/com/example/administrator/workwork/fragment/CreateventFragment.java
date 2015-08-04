@@ -292,9 +292,19 @@ public class CreateventFragment extends Fragment {
 
                 if (!(eventID ==null)){
 
-                    if (isNetworkAvailable()) {new UpdateEventJob(CreateventFragment.this.getActivity()).execute(new String[]{name_str, start_time_str, end_time_str,
-                            event_type, event_content_edittext.getText().toString(), "", event_location_edittext.getText().toString()
-                            , "", position_latitude.toString(), position_longitude.toString(), sharedStorage.GetPrefs("user_id", null),eventID});}
+                    if (isNetworkAvailable()) {new UpdateEventJob(CreateventFragment.this.getActivity()).execute(new String[]{
+                            name_str,
+                            start_time_str,
+                            end_time_str,
+                            event_type,
+                            PaymentJob.getText().toString(),
+                            event_content_edittext.getText().toString()
+                            ,""
+
+                            ,position_latitude.toString(),
+                            position_longitude.toString()
+                            ,sharedStorage.GetPrefs("user_id", null)
+                            ,eventID});}
                     else {
                         Toast.makeText(getActivity(), "No internet connection present", Toast.LENGTH_LONG).show();
                     }
@@ -465,30 +475,28 @@ public class CreateventFragment extends Fragment {
             try {
 
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/PHP/UpdaetEvent.php?eventNmae=" +
-                        encodeHTML(urls[0]) +
+                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/UpdaetEvent.php?eventNmae=" +
+                        encodeHTML(urls[0]).replaceAll(" ", "%20") +
                         "&eventTimestart=" +
-                        encodeHTML(urls[1]) +
+                        encodeHTML(urls[1]).replaceAll(" ", "%20") +
                         "&eventTimeend=" +
-                        encodeHTML(urls[2])+
+                        encodeHTML(urls[2]).replaceAll(" ", "%20")+
                         "&eventType=" +
-                        encodeHTML(urls[3])+
+                        encodeHTML(urls[3]).replaceAll(" ", "%20")+
+                        "&payment=" +
+                        encodeHTML(urls[4]).replaceAll(" ", "%20") +
                         "&eventContente=" +
-                        encodeHTML(urls[4]) +
-                        "&eventLocation=" +
-                        encodeHTML(urls[5]) +
-                        "&eventPosition=" +
-                        encodeHTML(urls[6]) +
+                        encodeHTML(urls[5]).replaceAll(" ", "%20") +
                         "&eventUserimage=" +
-                        encodeHTML(urls[7]) +
+                        encodeHTML(urls[6]).replaceAll(" ", "%20") +
                         "&position_latitude=" +
-                        encodeHTML(urls[8]) +
+                        encodeHTML(urls[7]).replaceAll(" ", "%20") +
                         "&position_longitude=" +
-                        encodeHTML(urls[9]) +
+                        encodeHTML(urls[8]).replaceAll(" ", "%20") +
                         "&userid=" +
-                        encodeHTML(urls[10])
+                        encodeHTML(urls[9]).replaceAll(" ", "%20")
                          +"&eventID=" +
-                        encodeHTML(urls[11])).replaceAll(" ", "%20"));
+                        encodeHTML(urls[10])).replaceAll(" ", "%20"));
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpResponse response = httpclient.execute(httppost);
 
