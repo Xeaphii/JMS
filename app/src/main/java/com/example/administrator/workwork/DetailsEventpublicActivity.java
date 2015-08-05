@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.media.Rating;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -24,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,11 +62,12 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
     private NavDrawerListAdapter adapter;
     public static FragmentManager fragmentManager;
     TextView event_time_textview;
-    TextView event_location_textview;
+    TextView event_location_textview,tv_title,tv_price,tv_descp;
     TextView event_description_textview;
     TextView Titleview;
     Button cancle_button;
     Boolean isJoined = false;
+    RatingBar RB;
 
     String eventID;
 
@@ -95,9 +98,23 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
         event_time_textview=(TextView)findViewById(R.id.event_time_textView);
         event_location_textview=(TextView)findViewById(R.id.event_location_textView);
         event_description_textview=(TextView)findViewById(R.id.event_content_textView);
+        RB = (RatingBar) findViewById(R.id.ratingBar);
+        RB.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if (!RB.isClickable())
+                    new RateUpdate().execute(new String[]{eventID, String.valueOf(RB.getRating())});
+            }
+
+        });
+
+        tv_title=(TextView)findViewById(R.id.textView4);
+        tv_price=(TextView)findViewById(R.id.textView8);
+        tv_descp=(TextView)findViewById(R.id.textView10);
+
 
         sharedStorage = new StorageSharedPref(DetailsEventpublicActivity.this);
-        cancle_button=(Button)findViewById(R.id.guest_button);
+        cancle_button=(Button)findViewById(R.id.cancle_button);
 
         new CheckJoining(DetailsEventpublicActivity.this).execute(new String[]{eventID, sharedStorage.GetPrefs("user_id", null)});
 
@@ -210,7 +227,53 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
             displayView(position);
         }
     }
+    class RateUpdate extends AsyncTask<String, Void, String> {
 
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+
+            try {
+
+                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/RateUpdateJob.php?proj_user_id=" +
+                        encodeHTML(urls[0]).replaceAll(" ", "%20") +
+                        "&proj_rating=" +
+                        encodeHTML(urls[1]).replaceAll(" ", "%20")
+                ));
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpResponse response = httpclient.execute(httppost);
+
+                // StatusLine stat = response.getStatusLine();
+                int status = response.getStatusLine().getStatusCode();
+
+                if (status == 200) {
+                    HttpEntity entity = response.getEntity();
+                    return EntityUtils.toString(entity);
+
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final String Resp) {
+
+            Toast.makeText(getApplicationContext(),"Profile rated",Toast.LENGTH_LONG).show();
+            RB.setFocusable(true);
+            RB.setIsIndicator(true);
+            RB.setClickable(true);
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -258,9 +321,11 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
                 intent.putExtra("myprofile","yes");
                 startActivity(intent);
                 break;
-//            case 2:
-//                fragment = new Message();
-//                break;
+            case 2:
+                Intent intentE=new Intent(DetailsEventpublicActivity.this,EventActivity.class);
+                intentE.putExtra("contactus","1");
+                startActivity(intentE);
+                break;
 //            case 3:
 //                fragment = new Setting();
 //                break;
@@ -401,6 +466,16 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
                 event_location_textview.setText(RespData[8]+","+RespData[9]);
                 event_description_textview.setText(RespData[6]);
                 Titleview.setText(RespData[1]);
+                RB.setRating(Float.valueOf(RespData[12].trim()));
+                if(RespData[10].trim().equals("0")){
+                    tv_descp.setText("Job Description");
+                    tv_price.setText("Job Rate");
+                    tv_title.setText("Job Title");
+                }else{
+                    tv_descp.setText("Offer Description");
+                    tv_price.setText("Offer Rate");
+                    tv_title.setText("Offer Title");
+                }
             }
         }
     }

@@ -19,8 +19,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.administrator.workwork.*;
+import com.example.administrator.workwork.CreateEventActivity;
+import com.example.administrator.workwork.CreateOfferActivity;
+import com.example.administrator.workwork.DetailsEventActivity;
+import com.example.administrator.workwork.DetailsEventpublicActivity;
 import com.example.administrator.workwork.ImageLoadPackge.ImageLoader;
+import com.example.administrator.workwork.R;
 import com.example.administrator.workwork.model.Event;
 
 import org.apache.http.HttpEntity;
@@ -34,8 +38,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class EventLIstFragment extends Fragment {
+/**
+ * Created by Administrator on 8/5/2015.
+ */
+public class CompanyProjectsFragment extends Fragment {
     ProgressDialog mProgressDialog;
     private EventAdapter adapter;
     public List<Event> data = null;
@@ -66,11 +72,10 @@ public class EventLIstFragment extends Fragment {
         // Gets the MapView from the XML layout and creates it
         setRetainInstance(true);
         data = new ArrayList<Event>();
-        sharedStorage = new StorageSharedPref(EventLIstFragment.this.getActivity());
-       // Toast.makeText(EventLIstFragment.this.getActivity(),sharedStorage.GetPrefs("fb_account", null),Toast.LENGTH_LONG).show();
+        sharedStorage = new StorageSharedPref(CompanyProjectsFragment.this.getActivity());
+        // Toast.makeText(EventLIstFragment.this.getActivity(),sharedStorage.GetPrefs("fb_account", null),Toast.LENGTH_LONG).show();
         if (isNetworkAvailable()) {
-            new UsersEvents(EventLIstFragment.this.getActivity()).execute(new String[]{sharedStorage.GetPrefs("user_id", null)});
-
+            new UsersEvents(CompanyProjectsFragment.this.getActivity()).execute(new String[]{sharedStorage.GetPrefs("user_id", null)});
         }
         else {
             Toast.makeText(getActivity(), "No internet connection present", Toast.LENGTH_LONG).show();
@@ -178,7 +183,7 @@ public class EventLIstFragment extends Fragment {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/PHP/UsersEvent.php?proj_event_id="+urls[0]).replaceAll(" ", "%20")
+                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/PHP/CompanyProjects.php?proj_event_id="+urls[0]).replaceAll(" ", "%20")
 
                 );
                 HttpClient httpclient = new DefaultHttpClient();
@@ -206,36 +211,36 @@ public class EventLIstFragment extends Fragment {
                 dialog.dismiss();
             }
             if(!Resp.equals("404")){
-            String[] EventsResp = Resp.split(";");
-            for (int i = 0 ; i <EventsResp.length;i++ ) {
-                // Locate images in flag column
-                String[] EventResp = EventsResp[i].split(":::");
-                final Event eventlist = new Event();
+                String[] EventsResp = Resp.split(";");
+                for (int i = 0 ; i <EventsResp.length;i++ ) {
+                    // Locate images in flag column
+                    String[] EventResp = EventsResp[i].split(":::");
+                    final Event eventlist = new Event();
 
-                eventlist.setUserid(EventResp[10]);
-                eventlist.setEventID(EventResp[0]);
-                eventlist.setEventNmae(EventResp[1]);
-                eventlist.setEventContente(EventResp[6]);
-                //eventlist.setEventLocation((String) event.get("location"));
-                eventlist.setEventPosition(EventResp[5]);
-                eventlist.setEventTimestart(EventResp[2]);
-                eventlist.setEventTimeend(EventResp[3]);
-                if (EventResp[7].equals("")) {
+                    eventlist.setUserid(EventResp[10]);
+                    eventlist.setEventID(EventResp[0]);
+                    eventlist.setEventNmae(EventResp[1]);
+                    eventlist.setEventContente(EventResp[6]);
+                    //eventlist.setEventLocation((String) event.get("location"));
+                    eventlist.setEventPosition(EventResp[5]);
+                    eventlist.setEventTimestart(EventResp[2]);
+                    eventlist.setEventTimeend(EventResp[3]);
+                    if (EventResp[7].equals("")) {
 
-                    eventlist.setEventUserimage("");
+                        eventlist.setEventUserimage("");
 
-                } else {
+                    } else {
 
-                    if(EventResp[12].trim().equals("0")){
-                        eventlist.setEventUserimage("http://droidcube.move.pk/PHP/images/" + EventResp[7] + ".jpg");
-                    }else{
-                        eventlist.setEventUserimage("https://graph.facebook.com/" +EventResp[7] + "/picture?type=large");
-                        //eventlist.setEventUserimage("https://graph.facebook.com/" + sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");
+                        if(EventResp[12].trim().equals("0")){
+                            eventlist.setEventUserimage("http://droidcube.move.pk/PHP/images/" + EventResp[7] + ".jpg");
+                        }else{
+                            eventlist.setEventUserimage("https://graph.facebook.com/" +EventResp[7] + "/picture?type=large");
+                            //eventlist.setEventUserimage("https://graph.facebook.com/" + sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");
+                        }
                     }
-                }
-                data.add(eventlist);
+                    data.add(eventlist);
 
-            }
+                }
 
             }
             adapter = new EventAdapter(getActivity(),
@@ -285,7 +290,7 @@ public class EventLIstFragment extends Fragment {
         }
         return out.toString();
     }
-	private boolean isNetworkAvailable() {
+    private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();

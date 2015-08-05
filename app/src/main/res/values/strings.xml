@@ -3,7 +3,7 @@
     <string name="google_maps_key" templateMergeStrategy="preserve">AIzaSyDqXwOAhF8FY8tA_F6pkpNDpR4NnD-K_k4</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="facebook_app_id">649326898502276</string>
+    <string name="facebook_app_id">421280671395376</string>
     <string name="com_parse_ui_logo_content_description">Logo</string>
     <string name="com_parse_ui_progress_dialog_text">Loading...</string>
     <string name="com_parse_ui_username_input_hint">Username</string>
@@ -65,11 +65,19 @@
     <string-array name="nav_drawer_items">
         <item>Home</item>
         <item>Profile</item>
-        <item>Communities</item>
-        <item>App Settings</item>
+        <item>Contact Us</item>
+        <item>Settings</item>
         <item>Log Out</item>
     </string-array>
     <string-array name="jobs_type">
+        <item>Creative</item>
+        <item>Technical</item>
+        <item>General Assistance</item>
+        <item>Labor</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="search_jobs_type">
+        <item>All</item>
         <item>Creative</item>
         <item>Technical</item>
         <item>General Assistance</item>

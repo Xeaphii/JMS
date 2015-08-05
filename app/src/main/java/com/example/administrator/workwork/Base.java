@@ -219,9 +219,11 @@ public class Base extends ActionBarActivity {
                 intent.putExtra("myprofile","yes");
                 startActivity(intent);
                 break;
-//            case 2:
-//                fragment = new Message();
-//                break;
+            case 2:
+                Intent intentE = new Intent(Base.this, EventActivity.class);
+                intentE.putExtra("contactus", "1");
+                startActivity(intentE);
+                break;
 //            case 3:
 //                fragment = new Setting();
 //                break;

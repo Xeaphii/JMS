@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +36,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import  android.content.pm.Signature;
 
 /**
  * Created by Administrator on 7/7/2015.
@@ -48,6 +54,7 @@ public class SignIn extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        Log.e("Error","");
 //        try {
 //            PackageInfo info = null;
 //            try {
@@ -63,7 +70,7 @@ public class SignIn extends Activity {
 //                        Base64.encodeToString(md.digest(), Base64.DEFAULT));
 //            }
 //        } catch (NoSuchAlgorithmException e) {
-//
+//            e.printStackTrace();
 //        }
         callbackManager = CallbackManager.Factory.create();
         sharedStorage = new StorageSharedPref(SignIn.this);

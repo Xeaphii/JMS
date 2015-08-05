@@ -14,13 +14,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.administrator.workwork.*;
+import com.example.administrator.workwork.CreateEventActivity;
+import com.example.administrator.workwork.CreateOfferActivity;
+import com.example.administrator.workwork.DetailsEventActivity;
+import com.example.administrator.workwork.DetailsEventpublicActivity;
 import com.example.administrator.workwork.ImageLoadPackge.ImageLoader;
+import com.example.administrator.workwork.R;
 import com.example.administrator.workwork.model.Event;
 
 import org.apache.http.HttpEntity;
@@ -34,42 +40,76 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class EventLIstFragment extends Fragment {
-    ProgressDialog mProgressDialog;
+/**
+ * Created by Administrator on 8/5/2015.
+ */
+public class SearchFragment extends Fragment {
     private EventAdapter adapter;
     public List<Event> data = null;
+    public List<Event> Sorteddata = null;
     ListView eventlistView;
     StorageSharedPref sharedStorage;
     Button createevent;
+    Button SearchButton;
+    EditText SearchString;
+    Spinner SelectionSpinner;
     ArrayList<String> users;
     String userString;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_event_list, container, false);
+        View v = inflater.inflate(R.layout.activity_adress_search, container, false);
         users=new ArrayList<String>();
         createevent=(Button)v.findViewById(R.id.create_event_event_list_button);
         createevent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =new Intent(getActivity(),CreateEventActivity.class);
+                Intent intent = new Intent(getActivity(), CreateEventActivity.class);
                 startActivity(intent);
             }
         });
         ((Button)v.findViewById(R.id.create_offer_list_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =new Intent(getActivity(),CreateOfferActivity.class);
+                Intent intent = new Intent(getActivity(), CreateOfferActivity.class);
                 startActivity(intent);
             }
         });
         eventlistView=(ListView)v.findViewById(R.id.event_listView);
+
+        SearchButton = (Button) v.findViewById(R.id.bt_search);
+        SearchString = (EditText) v.findViewById(R.id.search_editText);
+        SelectionSpinner = (Spinner) v.findViewById(R.id.spinnersearch);
+        SearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String jobType = (String) SelectionSpinner.getSelectedItem();
+                if (!SearchString.getText().toString().equals("")) {
+                    String SearchStringS = SearchString.getText().toString().toString();
+
+                    data.clear();
+                    for(int i = 0 ; i < Sorteddata.size();i++){
+                        if(Sorteddata.get(i).getEventNmae().contains(SearchStringS)){
+                            if(jobType.equals("All")){
+                                data.add(Sorteddata.get(i));
+                            }else if(Sorteddata.get(i).getEventType().equals(jobType)){
+                                data.add(Sorteddata.get(i));
+                            }
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetInvalidated();
+                }
+
+            }
+        });
+
         // Gets the MapView from the XML layout and creates it
         setRetainInstance(true);
         data = new ArrayList<Event>();
-        sharedStorage = new StorageSharedPref(EventLIstFragment.this.getActivity());
-       // Toast.makeText(EventLIstFragment.this.getActivity(),sharedStorage.GetPrefs("fb_account", null),Toast.LENGTH_LONG).show();
+        Sorteddata = new ArrayList<Event>();
+        sharedStorage = new StorageSharedPref(SearchFragment.this.getActivity());
+        // Toast.makeText(EventLIstFragment.this.getActivity(),sharedStorage.GetPrefs("fb_account", null),Toast.LENGTH_LONG).show();
         if (isNetworkAvailable()) {
-            new UsersEvents(EventLIstFragment.this.getActivity()).execute(new String[]{sharedStorage.GetPrefs("user_id", null)});
+            new UsersEvents(SearchFragment.this.getActivity()).execute(new String[]{sharedStorage.GetPrefs("user_id", null)});
 
         }
         else {
@@ -206,36 +246,37 @@ public class EventLIstFragment extends Fragment {
                 dialog.dismiss();
             }
             if(!Resp.equals("404")){
-            String[] EventsResp = Resp.split(";");
-            for (int i = 0 ; i <EventsResp.length;i++ ) {
-                // Locate images in flag column
-                String[] EventResp = EventsResp[i].split(":::");
-                final Event eventlist = new Event();
+                String[] EventsResp = Resp.split(";");
+                for (int i = 0 ; i <EventsResp.length;i++ ) {
+                    // Locate images in flag column
+                    String[] EventResp = EventsResp[i].split(":::");
+                    final Event eventlist = new Event();
 
-                eventlist.setUserid(EventResp[10]);
-                eventlist.setEventID(EventResp[0]);
-                eventlist.setEventNmae(EventResp[1]);
-                eventlist.setEventContente(EventResp[6]);
-                //eventlist.setEventLocation((String) event.get("location"));
-                eventlist.setEventPosition(EventResp[5]);
-                eventlist.setEventTimestart(EventResp[2]);
-                eventlist.setEventTimeend(EventResp[3]);
-                if (EventResp[7].equals("")) {
+                    eventlist.setUserid(EventResp[10]);
+                    eventlist.setEventID(EventResp[0]);
+                    eventlist.setEventNmae(EventResp[1]);
+                    eventlist.setEventContente(EventResp[6]);
+                    //eventlist.setEventLocation((String) event.get("location"));
+                    eventlist.setEventPosition(EventResp[5]);
+                    eventlist.setEventTimestart(EventResp[2]);
+                    eventlist.setEventTimeend(EventResp[3]);
+                    if (EventResp[7].equals("")) {
 
-                    eventlist.setEventUserimage("");
+                        eventlist.setEventUserimage("");
 
-                } else {
+                    } else {
 
-                    if(EventResp[12].trim().equals("0")){
-                        eventlist.setEventUserimage("http://droidcube.move.pk/PHP/images/" + EventResp[7] + ".jpg");
-                    }else{
-                        eventlist.setEventUserimage("https://graph.facebook.com/" +EventResp[7] + "/picture?type=large");
-                        //eventlist.setEventUserimage("https://graph.facebook.com/" + sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");
+                        if(EventResp[12].trim().equals("0")){
+                            eventlist.setEventUserimage("http://droidcube.move.pk/PHP/images/" + EventResp[7] + ".jpg");
+                        }else{
+                            eventlist.setEventUserimage("https://graph.facebook.com/" +EventResp[7] + "/picture?type=large");
+                            //eventlist.setEventUserimage("https://graph.facebook.com/" + sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");
+                        }
                     }
-                }
-                data.add(eventlist);
+                    data.add(eventlist);
 
-            }
+                }
+                Sorteddata = data;
 
             }
             adapter = new EventAdapter(getActivity(),
@@ -285,7 +326,7 @@ public class EventLIstFragment extends Fragment {
         }
         return out.toString();
     }
-	private boolean isNetworkAvailable() {
+    private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();

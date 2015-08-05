@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.administrator.workwork.adapter.NavDrawerListAdapter;
+import com.example.administrator.workwork.fragment.CompanyProjectsFragment;
 import com.example.administrator.workwork.fragment.EventLIstFragment;
 import com.example.administrator.workwork.model.NavDrawerItem;
 import com.facebook.login.LoginManager;
@@ -127,7 +128,14 @@ public class EventActivity extends ActionBarActivity {
                         .replace(R.id.content_event, fragment).commit();
             }
         });
-        if (savedInstanceState == null) {
+        if ( getIntent().getStringExtra("contactus").trim().equals("1")) {
+            // on first time display view for first nav item
+            android.support.v4.app.Fragment fragment=new CompanyProjectsFragment();
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_event, fragment).commit();
+        }
+        else  {
             // on first time display view for first nav item
             android.support.v4.app.Fragment fragment=new EventLIstFragment();
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
@@ -196,9 +204,11 @@ public class EventActivity extends ActionBarActivity {
                     intent.putExtra("myprofile","yes");
                     startActivity(intent);
                 break;
-//            case 2:
-//                fragment = new Message();
-//                break;
+            case 2:
+                Intent intentE = new Intent(EventActivity.this, EventActivity.class);
+                intentE.putExtra("contactus", "1");
+                startActivity(intentE);
+                break;
 //            case 3:
 //                fragment = new Setting();
 //                break;

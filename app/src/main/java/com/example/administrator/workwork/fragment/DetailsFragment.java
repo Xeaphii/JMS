@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +38,9 @@ public class DetailsFragment extends Fragment {
     Button edit_button;
     Button cancle_button;
     String eventID;
-    TextView Titleview;
+    TextView Titleview,tv_title,tv_price,tv_descp;
+    RatingBar RB;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +53,14 @@ public class DetailsFragment extends Fragment {
         event_time_textview=(TextView)v.findViewById(R.id.event_time_textView);
         Titleview = (TextView) v.findViewById(R.id.textView_title);
         event_location_textview=(TextView)v.findViewById(R.id.event_location_textView);
+
+        tv_title=(TextView)v.findViewById(R.id.textView4);
+        tv_price=(TextView)v.findViewById(R.id.textView8);
+        tv_descp=(TextView)v.findViewById(R.id.textView10);
+        RB = (RatingBar) v.findViewById(R.id.ratingBar);
+        RB.setFocusable(true);
+        RB.setIsIndicator(true);
+        RB.setClickable(true);
         event_description_textview=(TextView)v.findViewById(R.id.event_content_textView);
         edit_button=(Button)v.findViewById(R.id.edit_button);
         cancle_button=(Button)v.findViewById(R.id.cancle_button);
@@ -136,9 +147,19 @@ public class DetailsFragment extends Fragment {
             if(Resp!=null){
                 String[] RespData = Resp.split(":::");
                 event_time_textview.setText(RespData[5]);
+                RB.setRating(Float.valueOf(RespData[12].trim()));
                 event_location_textview.setText(RespData[8]+","+RespData[9]);
                 event_description_textview.setText(RespData[6]);
                 Titleview.setText(RespData[1]);
+                if(RespData[10].trim().equals("0")){
+                    tv_descp.setText("Job Description");
+                    tv_price.setText("Job Rate");
+                    tv_title.setText("Job Title");
+                }else{
+                    tv_descp.setText("Offer Description");
+                    tv_price.setText("Offer Rate");
+                    tv_title.setText("Offer Title");
+                }
             }
         }
     }

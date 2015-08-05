@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.administrator.workwork.model.Event;
@@ -43,18 +44,13 @@ public class Home extends Fragment {
     MapView mapView;
     StorageSharedPref sharedStorage;
     GoogleMap map;
-    private Marker mMarkerA;
-    private Marker mMarkerB;
-    private Marker mMarkerC;
-    private Marker mMarkerD;
     Hashtable<String, Integer> table;
      // Might be null if Google Play services APK is not available.
     GPSTracker gps;
     ProgressDialog mProgressDialog;
     public List<Event> data = null;
-    private LocationManager locationManager;
-    private String provider;
     View rootView;
+    Button Offer,Job,search;
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -62,6 +58,53 @@ public class Home extends Fragment {
         rootView  = inflater.inflate(R.layout.fragment_home, container, false);
         // Gets the MapView from the XML layout and creates it
         mapView = (MapView)  rootView.findViewById(R.id.map);
+
+        Offer = (Button)  rootView.findViewById(R.id.create_offer_list_button);
+        Job = (Button)  rootView.findViewById(R.id.create_event_event_list_button);
+        search= (Button)  rootView.findViewById(R.id.search_button);
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent zoom = new Intent(getActivity(), AdressSearchActivity.class);
+                startActivity(zoom);
+            }
+        });
+
+        Job.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!(data == null)){
+                    map.clear();
+                    for (int i=0;i<data.size();i++){
+                        if(data.get(i).getEventPosition().trim().equals("0")) {
+                            String content = data.get(i).getEventPosition();
+                            Marker mark = map.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getPosition_latitude(), data.get(i).getPosition_longitude())).title(data.get(i).getEventNmae()).snippet(content).draggable(true).icon(BitmapDescriptorFactory.fromResource(R.drawable.man)).draggable(true));
+                            table.put(mark.getId(), Integer.valueOf(i));
+                        }
+                    }
+
+                }
+            }
+        });
+
+        Offer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!(data == null)){
+                    map.clear();
+                    for (int i=0;i<data.size();i++){
+                        if(data.get(i).getEventPosition().trim().equals("1")) {
+                            String content = data.get(i).getEventPosition();
+                            Marker mark = map.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getPosition_latitude(), data.get(i).getPosition_longitude())).title(data.get(i).getEventNmae()).snippet(content).draggable(true).icon(BitmapDescriptorFactory.fromResource(R.drawable.man)).draggable(true));
+                            table.put(mark.getId(), Integer.valueOf(i));
+                        }
+                    }
+
+                }
+            }
+        });
+
         mapView.onCreate(savedInstanceState);
         gps = new GPSTracker(getActivity());
         table = new Hashtable<String, Integer>();
@@ -193,26 +236,25 @@ public class Home extends Fragment {
                         // Locate images in flag column
                         final Event eventlist = new Event();
                         String[] EvenetsEntry= RespData[i].split(":::");
-                        eventlist.setEventID(EvenetsEntry[0]);
-                        eventlist.setEventNmae(EvenetsEntry[1]);
-                        eventlist.setEventContente(EvenetsEntry[5]);
-                        eventlist.setUserid(EvenetsEntry[11]);
-                        //eventlist.setEventLocation(EvenetsEntry[6]);
-                        eventlist.setEventPosition(EvenetsEntry[7]);
-                        eventlist.setEventTimestart(EvenetsEntry[2]);
-                        eventlist.setEventTimeend(EvenetsEntry[3]);
-                        eventlist.setPosition_latitude(Double.parseDouble(EvenetsEntry[9]));
-                        eventlist.setPosition_longitude(Double.parseDouble(EvenetsEntry[10]));
-                        if(EvenetsEntry[8].equals("")){
+                        eventlist.setUserid(RespData[10]);
+                        eventlist.setEventID(RespData[0]);
+                        eventlist.setEventNmae(RespData[1]);
+                        eventlist.setEventContente(RespData[6]);
+                        //eventlist.setEventLocation((String) event.get("location"));
+                        eventlist.setEventPosition(RespData[10]);
+                        eventlist.setEventTimestart(RespData[2]);
+                        eventlist.setEventTimeend(RespData[3]);
+                        if (RespData[7].equals("")) {
 
                             eventlist.setEventUserimage("");
 
-                        }
-                        else {
-                            if(sharedStorage.GetPrefs("fb_account", null)==(null)){
-                                eventlist.setEventUserimage("http://droidcube.move.pk/PHP/images/"+EvenetsEntry[8]+".jpg");
+                        } else {
+
+                            if (RespData[12].trim().equals("0")){
+                                eventlist.setEventUserimage("http://droidcube.move.pk/PHP/images/" + RespData[7] + ".jpg");
                             }else{
-                                eventlist.setEventUserimage("https://graph.facebook.com/" +sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");
+                                eventlist.setEventUserimage("https://graph.facebook.com/" +RespData[7] + "/picture?type=large");
+                                //eventlist.setEventUserimage("https://graph.facebook.com/" + sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");
                             }
                         }
                         data.add(eventlist);

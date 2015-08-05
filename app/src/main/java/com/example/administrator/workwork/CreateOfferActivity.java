@@ -45,11 +45,12 @@ public class CreateOfferActivity extends ActionBarActivity {
     private ArrayList<NavDrawerItem> navDrawerItems;
     private NavDrawerListAdapter adapter;
     public static FragmentManager fragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
-        eventbut=(Button)findViewById(R.id.event_imageButton);
+        eventbut = (Button) findViewById(R.id.event_imageButton);
         eventbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +93,6 @@ public class CreateOfferActivity extends ActionBarActivity {
         // What's hot, We  will add a counter here
 
 
-
         // Recycle the typed array
         navMenuIcons.recycle();
 
@@ -128,7 +128,7 @@ public class CreateOfferActivity extends ActionBarActivity {
 
         if (savedInstanceState == null) {
             // on first time display view for first nav item
-            android.support.v4.app.Fragment fragment=new CreateOfferFragment();
+            android.support.v4.app.Fragment fragment = new CreateOfferFragment();
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.content_create, fragment).commit();
@@ -137,7 +137,7 @@ public class CreateOfferActivity extends ActionBarActivity {
 
     /**
      * Slide menu item click listener
-     * */
+     */
     private class SlideMenuClickListener implements
             ListView.OnItemClickListener {
         @Override
@@ -182,7 +182,7 @@ public class CreateOfferActivity extends ActionBarActivity {
 
     /**
      * Diplaying fragment view for selected nav drawer list item
-     * */
+     */
     private void displayView(int position) {
         // update the main content by replacing fragments
         Fragment fragment = null;
@@ -192,6 +192,11 @@ public class CreateOfferActivity extends ActionBarActivity {
                 break;
             case 1:
                 fragment = new Profile();
+                break;
+            case 2:
+                Intent intentE = new Intent(CreateOfferActivity.this, EventActivity.class);
+                intentE.putExtra("contactus", "1");
+                startActivity(intentE);
                 break;
 //            case 2:
 //                fragment = new Message();
@@ -229,13 +234,14 @@ public class CreateOfferActivity extends ActionBarActivity {
         mTitle = title;
         actionBar.setTitle(mTitle);
     }
+
     private void onLogoutButtonClicked() {
         // close this user's session
-        sharedStorage.StorePrefs("user_id",null);
-        sharedStorage.StorePrefs("fb_account",null);
+        sharedStorage.StorePrefs("user_id", null);
+        sharedStorage.StorePrefs("fb_account", null);
         LoginManager.getInstance().logOut();
 
-        Intent intent=new Intent(CreateOfferActivity.this,SignIn.class);
+        Intent intent = new Intent(CreateOfferActivity.this, SignIn.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
@@ -244,6 +250,7 @@ public class CreateOfferActivity extends ActionBarActivity {
         // Go to the login view
 
     }
+
     /**
      * When using the ActionBarDrawerToggle, you must call it during
      * onPostCreate() and onConfigurationChanged()...

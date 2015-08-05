@@ -10,34 +10,37 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/relativeLayout5">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/search_editText"
-            android:layout_alignParentBottom="true"
-            android:singleLine="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+
         <LinearLayout
             android:id="@+id/LinearLayout02"
+            android:orientation="horizontal"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:layout_alignParentBottom="true">
-            <Button
-                android:id="@+id/create_event_event_list_button"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:textColor="#ffffffff"
-                android:layout_weight="1" android:text="Create Job">
-            </Button>
+            <EditText
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:id="@+id/search_editText"
+                android:layout_alignParentBottom="true"
+                android:singleLine="true"
+                android:layout_weight="1"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
 
             <Spinner
-                android:id="@+id/spinner1"
+                android:id="@+id/spinnersearch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:entries="@array/jobs_type" />
+                android:layout_weight="12"
+                android:entries="@array/search_jobs_type" />
+            <Button
+                android:id="@+id/bt_search"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:text="Search">
+            </Button>
         </LinearLayout>
 
     </RelativeLayout>

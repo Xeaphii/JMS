@@ -3,15 +3,23 @@ package com.example.administrator.workwork;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.TypedArray;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,10 +31,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.workwork.ImageLoadPackge.ImageLoader;
+import com.example.administrator.workwork.adapter.NavDrawerListAdapter;
+import com.example.administrator.workwork.fragment.CompanyProjectsFragment;
+import com.example.administrator.workwork.fragment.EventLIstFragment;
 import com.example.administrator.workwork.model.Adress;
+import com.example.administrator.workwork.model.NavDrawerItem;
 import com.example.administrator.workwork.utill.GPSTracker;
 import com.example.administrator.workwork.utill.HttpResponseData;
 import com.example.administrator.workwork.utill.HttpUtility;
+import com.facebook.login.LoginManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,351 +52,256 @@ import java.util.Locale;
 
 
 public class AdressSearchActivity extends ActionBarActivity {
-    Button search_but;
-    EditText search_content;
-    Button back_but;
-    ListView address_listview;
-
-    ProgressDialog mProgressDialog;
-    private Adressdapter adapter;
-    public List<Adress> data = null;
-    public static final String GOOGLE_PLACES_AUTOCOMPLETE = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%s&types=%s&types=(cities)&components=country:us&key=AIzaSyD478Y5RvbosbO4s34uRaukMwiPkBxJi5A";
-    public static final String PLACES_API_DATA_RESULT_TYPE_GEOCODE = "geocode";
-    GPSTracker gps;
-    Double position_latitude;
-    Double position_longitude;
-    String address;
-    String city;
+    //This class is class that is include slider menu.
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
+    // nav drawer title
+    private CharSequence mDrawerTitle;
+    ActionBar actionBar;
+    // used to store app title
+    private CharSequence mTitle;
+    StorageSharedPref sharedStorage;
+    Button event;
+    // slide menu items
+    private String[] navMenuTitles;
+    private TypedArray navMenuIcons;
+    private static final int LOGIN_REQUEST = 0;
+    private ArrayList<NavDrawerItem> navDrawerItems;
+    private NavDrawerListAdapter adapter;
+    public static android.support.v4.app.FragmentManager fragmentManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_adress_search);
-//        search_but=(Button)findViewById(R.id.search_button);
-        search_content=(EditText)findViewById(R.id.search_editText);
-//        back_but=(Button)findViewById(R.id.back_button);
-        address_listview=(ListView)findViewById(R.id.address_listView);
+        setContentView(R.layout.activity_event);
 
-        gps = new GPSTracker(this);
+        event=(Button)findViewById(R.id.event_imageButton);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        // check if GPS enabled
-        if(gps.canGetLocation()){
+        setSupportActionBar(toolbar);
+        sharedStorage = new StorageSharedPref(AdressSearchActivity.this);
 
-            position_latitude = gps.getLatitude();
-            position_longitude = gps.getLongitude();
+        fragmentManager = getSupportFragmentManager();
+        mTitle = mDrawerTitle = getTitle();
+
+        // load slide menu items
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+
+        // nav drawer icons from resources
+        navMenuIcons = getResources()
+                .obtainTypedArray(R.array.nav_drawer_icons);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
+
+        navDrawerItems = new ArrayList<NavDrawerItem>();
+
+        // adding nav drawer items to array
+        // Home
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
+        // Find People
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
+        // Photos
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
+        // Communities, Will add a counter here
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
+        // Pages
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
+        // What's hot, We  will add a counter here
 
 
 
-            Geocoder geocoder;
-            List<Address> addresses = null;
-            geocoder = new Geocoder(this, Locale.getDefault());
-            try {
-                addresses = geocoder.getFromLocation(position_latitude, position_longitude, 1);
-                address = addresses.get(0).getAddressLine(0);
-                city = addresses.get(0).getAddressLine(1);
-                String country = addresses.get(0).getAddressLine(2);
-            } catch (IOException e) {
-                e.printStackTrace();
+        // Recycle the typed array
+        navMenuIcons.recycle();
+
+        mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+
+        // setting the nav drawer list adapter
+        adapter = new NavDrawerListAdapter(getApplicationContext(),
+                navDrawerItems);
+        mDrawerList.setAdapter(adapter);
+        actionBar = getSupportActionBar();
+        // enabling action bar app icon and behaving it as toggle button
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.drawable.ic_drawer, //nav menu toggle icon
+                R.string.app_name, // nav drawer open - description for accessibility
+                R.string.app_name // nav drawer close - description for accessibility
+        ) {
+            public void onDrawerClosed(View view) {
+                //actionBar.setTitle(mTitle);
+                // calling onPrepareOptionsMenu() to show action bar icons
+                invalidateOptionsMenu();
             }
 
-            search_content.setText(address+","+city);
-
-            // \n is for new line
-            // Toast.makeText(getActivity(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-        }else{
-            // can't get location
-            // GPS or Network is not enabled
-            // Ask user to enable GPS/network in settings
-            gps.showSettingsAlert();
-        }
-
-
-//        search_content.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                String location = search_content.getText().toString();
-//
-//                if(location!=null && !location.equals("")){
-//                    searchCity(location);
-//                }
-//
-//
-//            }
-//        });
-
-
-
-        search_content.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {
+            public void onDrawerOpened(View drawerView) {
+                // actionBar.setTitle(mDrawerTitle);
+                // calling onPrepareOptionsMenu() to hide action bar icons
+                invalidateOptionsMenu();
             }
-
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                String location = search_content.getText().toString();
-
-                if(location!=null && !location.equals("")){
-                    searchCity(location);
-//                    new GeocoderTask().execute(location);
-                }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.support.v4.app.Fragment fragment=new EventLIstFragment();
+                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_event, fragment).commit();
             }
         });
-
-
-
-    }
-
-
-    private void searchCity(String key) {
-        final String searchKey = key.replace(" ", "+");
-        data = new ArrayList<Adress>();
-
-        new Thread() {
-            public void run() {
-                String reqUrl = String.format(
-                        GOOGLE_PLACES_AUTOCOMPLETE, searchKey,
-                        PLACES_API_DATA_RESULT_TYPE_GEOCODE);
-                HttpUtility httpUtility = new HttpUtility();
-                HttpResponseData responseData = httpUtility.sendGet(reqUrl);
-                if (responseData != null && responseData.getStatusCode() == 200) {
-                    try {
-                        JSONObject jsonData = new JSONObject(
-                                responseData.getResponseContent());
-                        JSONArray predictions = jsonData
-                                .getJSONArray("predictions");
-                        data.clear();
-                        JSONObject prediction;
-                        for (int i = 0; i < predictions.length(); i++) {
-
-                            final Adress adressdata=new Adress();
-                            prediction = predictions.getJSONObject(i);
-                            String fullAddress = prediction.getString("description");
-                            int range = fullAddress.lastIndexOf(",");
-                            adressdata.setAdress(fullAddress.substring(0, range));
-                            Log.d("getData",fullAddress.substring(0, range));
-                            data.add(adressdata);
-                        }
-
-                        for (int i=0;i<data.size();i++){
-
-
-
-                            Log.d("adsfadfsdfadfasdf",data.get(i).getAdress());
-
-
-
-                        }
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                // TODO Auto-generated method stub
-                                adapter = new Adressdapter(AdressSearchActivity.this,
-                                        data);
-                                // Binds the Adapter to the ListView
-                                address_listview.setAdapter(adapter);
-
-
-                                address_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view,
-                                                            int position, long id) {
-                                        data.get(position).getAdress();
-                                        Intent zoom = new Intent(AdressSearchActivity.this, CreateEventActivity.class);
-                                        zoom.putExtra("address", data.get(position).getAdress());
-                                        startActivity(zoom);
-
-
-//                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                                    }
-                                });
-
-                            }
-                        });
-                    } catch (JSONException e) {
-                        // TODO Auto-generated catch block
-                        // e.printStackTrace();
-                    }
-                }
-            }
-        }.start();
-    }
-
-
-
-
-
-    private class GeocoderTask extends AsyncTask<String, Void, List<Address>>{
-
-        @Override
-        protected List<Address> doInBackground(String... locationName) {
-            // Creating an instance of Geocoder class
-            Geocoder geocoder = new Geocoder(getBaseContext());
-            List<Address> addresses = null;
-
-            try {
-                // Getting a maximum of 3 Address that matches the input text
-                addresses = geocoder.getFromLocationName(locationName[0], 3);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return addresses;
+        if ( getIntent().getStringExtra("contactus").trim().equals("1")) {
+            // on first time display view for first nav item
+            android.support.v4.app.Fragment fragment=new CompanyProjectsFragment();
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_event, fragment).commit();
         }
-
-        @Override
-        protected void onPostExecute(List<Address> addresses) {
-            mProgressDialog = new ProgressDialog(AdressSearchActivity.this);
-            // Set progressdialog title
-            mProgressDialog.setTitle("Message");
-            // Set progressdialog message
-            mProgressDialog.setMessage("Loading...");
-            mProgressDialog.setIndeterminate(false);
-            // Show progressdialog
-            mProgressDialog.show();
-            if(addresses==null || addresses.size()==0){
-                Toast.makeText(getBaseContext(), "No Location found", Toast.LENGTH_SHORT).show();
-                mProgressDialog.dismiss();
-            }
-            else{
-
-                Adress adressdata=new Adress();
-                data = new ArrayList<Adress>();
-                // Adding Markers on Google Map for each matching address
-                for(int i=0;i<addresses.size();i++){
-
-                    Address address = (Address) addresses.get(i);
-
-                    // Creating an instance of GeoPoint, to display in Google Map
-//                latLng = new LatLng(address.getLatitude(), address.getLongitude());
-
-                    String addressText = String.format("%s, %s",
-                            address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                            address.getCountryName());
-                    adressdata.setAdress(address.getAddressLine(0));
-                    Log.d("getadress",addressText);
-                    data.add(adressdata);
-//                markerOptions = new MarkerOptions();
-//                markerOptions.position(latLng);
-//                markerOptions.title(addressText);
-//
-//                googleMap.addMarker(markerOptions);
-
-                    // Locate the first location
-
-                }
-
-
-                adapter = new Adressdapter(AdressSearchActivity.this,
-                        data);
-                // Binds the Adapter to the ListView
-                 address_listview.setAdapter(adapter);
-                mProgressDialog.dismiss();
-
-            }
-            // Clears all the existing markers on the map
-
-
-//            eventlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> parent, View view,
-//                                        int position, long id) {
-//                    data.get(position).getEventID();
-//                    Intent zoom = new Intent(getActivity(), DetailsEventActivity.class);
-//                    zoom.putExtra("eventID", data.get(position).getEventID());
-//                    startActivity(zoom);
-//
-//
-////                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
-//                }
-//            });
-            // Close the progressdialog
-
-
-
+        else  {
+            // on first time display view for first nav item
+            android.support.v4.app.Fragment fragment=new EventLIstFragment();
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_event, fragment).commit();
         }
     }
 
-
-  public   class Adressdapter extends BaseAdapter {
-        boolean flag = true;
-        Context context;
-        LayoutInflater inflater;
-        ImageLoader imageLoader;
-        private List<Adress> worldpopulationlist = null;
-        private ArrayList<Adress> arraylist;
-
-        /**
-         * Constructor from a list of items
-         */
-        public Adressdapter(Context context, List<Adress> worldpopulationlist) {
-
-            this.context = context;
-            this.worldpopulationlist = worldpopulationlist;
-            inflater = LayoutInflater.from(context);
-            this.arraylist = new ArrayList<Adress>();
-            this.arraylist.addAll(worldpopulationlist);
-
-        }
-
+    /**
+     * Slide menu item click listener
+     * */
+    private class SlideMenuClickListener implements
+            ListView.OnItemClickListener {
         @Override
-        public View getView(final int position, View view, ViewGroup parent) {
-            final ViewHolder holder;
-
-            if (view == null) {
-                holder = new ViewHolder();
-                view = inflater.inflate(R.layout.adress_item_layout, null);
-
-//            holder.userimageview = (ImageView) view.findViewById(R.id.event_imageView);
-//            holder.eventnametextview=(TextView)view.findViewById(R.id.event_name_textView);
-                holder.adress_name_textview=(TextView)view.findViewById(R.id.adress_name_textView);
-
-                view.setTag(holder);
-            } else {
-                holder = (ViewHolder) view.getTag();
-            }
-
-
-            holder.adress_name_textview.setText(worldpopulationlist.get(position).getAdress());
-
-
-
-            // Restore the checked state properly
-            final ListView lv = (ListView) parent;
-//        holder.layout.setChecked(lv.isItemChecked(position));
-
-            return view;
-        }
-
-        @Override
-        public int getCount() {
-            return worldpopulationlist.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return worldpopulationlist.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        private class ViewHolder {
-
-            //        public ImageView userimageview;
-//        public TextView  eventnametextview;
-            public TextView  adress_name_textview;
-
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            // display view for selected nav drawer item
+            displayView(position);
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // toggle nav drawer on selecting action bar app icon/title
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle action bar actions click
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /* *
+     * Called when invalidateOptionsMenu() is triggered
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // if nav drawer is opened, hide the action items
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    /**
+     * Diplaying fragment view for selected nav drawer list item
+     * */
+    private void displayView(int position) {
+        // update the main content by replacing fragments
+        android.support.v4.app.Fragment fragment = null;
+        switch (position) {
+            case 0:
+                fragment = new Home();
+                break;
+            case 1:
+                Intent intent=new Intent(AdressSearchActivity.this,ProfileActivity.class);
+                intent.putExtra("myprofile","yes");
+                startActivity(intent);
+                break;
+            case 2:
+                Intent intentE = new Intent(AdressSearchActivity.this, EventActivity.class);
+                intentE.putExtra("contactus", "1");
+                startActivity(intentE);
+                break;
+//            case 3:
+//                fragment = new Setting();
+//                break;
+            case 4:
+                onLogoutButtonClicked();
+                break;
+
+
+            default:
+                break;
+        }
+
+        if (fragment != null) {
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_event, fragment).commit();
+
+            // update selected item and title, then close the drawer
+            mDrawerList.setItemChecked(position, true);
+            mDrawerList.setSelection(position);
+            setTitle(navMenuTitles[position]);
+            mDrawerLayout.closeDrawer(mDrawerList);
+        } else {
+            // error in creating fragment
+            Log.e("MainActivity", "Error in creating fragment");
+        }
+    }
+    private void onLogoutButtonClicked() {
+        // close this user's session
+        sharedStorage.StorePrefs("user_id",null);
+        sharedStorage.StorePrefs("fb_account",null);
+        LoginManager.getInstance().logOut();
+        Intent intent=new Intent(AdressSearchActivity.this,SignIn.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+        // Log the user out
+
+        // Go to the login view
+
+    }
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        actionBar.setTitle(mTitle);
+    }
+
+    /**
+     * When using the ActionBarDrawerToggle, you must call it during
+     * onPostCreate() and onConfigurationChanged()...
+     */
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggls
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+//    private ActionBar getActionBar() {
+//        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+//    }
 }
-
 
 
 
