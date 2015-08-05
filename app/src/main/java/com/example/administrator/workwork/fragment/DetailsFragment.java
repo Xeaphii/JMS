@@ -154,11 +154,11 @@ public class DetailsFragment extends Fragment {
                 if(RespData[10].trim().equals("0")){
                     tv_descp.setText("Job Description");
                     tv_price.setText("Job Rate");
-                    tv_title.setText("Job Title");
+                    tv_title.setText("Job Location");
                 }else{
                     tv_descp.setText("Offer Description");
                     tv_price.setText("Offer Rate");
-                    tv_title.setText("Offer Title");
+                    tv_title.setText("Offer Location");
                 }
             }
         }

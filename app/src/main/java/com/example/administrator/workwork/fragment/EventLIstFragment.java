@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -178,7 +179,8 @@ public class EventLIstFragment extends Fragment {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/PHP/UsersEvent.php?proj_event_id="+urls[0]).replaceAll(" ", "%20")
+               // Log.e("Errpr","http://droidcube.move.pk/JMS/UsersEvent.php?proj_event_id="+urls[0]);
+                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/UsersEvent.php?proj_event_id="+urls[0]).replaceAll(" ", "%20")
 
                 );
                 HttpClient httpclient = new DefaultHttpClient();
@@ -227,7 +229,7 @@ public class EventLIstFragment extends Fragment {
                 } else {
 
                     if(EventResp[12].trim().equals("0")){
-                        eventlist.setEventUserimage("http://droidcube.move.pk/PHP/images/" + EventResp[7] + ".jpg");
+                        eventlist.setEventUserimage("http://droidcube.move.pk/JMS/images/" + EventResp[7] + ".jpg");
                     }else{
                         eventlist.setEventUserimage("https://graph.facebook.com/" +EventResp[7] + "/picture?type=large");
                         //eventlist.setEventUserimage("https://graph.facebook.com/" + sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");
@@ -247,7 +249,7 @@ public class EventLIstFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
                     if (sharedStorage.GetPrefs("user_id", null).equals(data.get(position).getUserid())){
-                        data.get(position).getEventID();
+                        //data.get(position).getEventID();
                         Intent zoom = new Intent(getActivity(), DetailsEventActivity.class);
                         zoom.putExtra("eventID", data.get(position).getEventID());
                         startActivity(zoom);
@@ -255,7 +257,7 @@ public class EventLIstFragment extends Fragment {
 
                     else {
 
-                        data.get(position).getEventID();
+                       // data.get(position).getEventID();
                         Intent zoom = new Intent(getActivity(), DetailsEventpublicActivity.class);
                         zoom.putExtra("eventID", data.get(position).getEventID());
                         startActivity(zoom);

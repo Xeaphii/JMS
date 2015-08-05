@@ -34,6 +34,7 @@ import com.example.administrator.workwork.ImageLoadPackge.ImageLoader;
 import com.example.administrator.workwork.adapter.NavDrawerListAdapter;
 import com.example.administrator.workwork.fragment.CompanyProjectsFragment;
 import com.example.administrator.workwork.fragment.EventLIstFragment;
+import com.example.administrator.workwork.fragment.SearchFragment;
 import com.example.administrator.workwork.model.Adress;
 import com.example.administrator.workwork.model.NavDrawerItem;
 import com.example.administrator.workwork.utill.GPSTracker;
@@ -73,7 +74,7 @@ public class AdressSearchActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event);
+        setContentView(R.layout.search_activity);
 
         event=(Button)findViewById(R.id.event_imageButton);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -146,13 +147,14 @@ public class AdressSearchActivity extends ActionBarActivity {
         event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                android.support.v4.app.Fragment fragment=new EventLIstFragment();
+                android.support.v4.app.Fragment fragment=new SearchFragment();
                 android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.content_event, fragment).commit();
             }
         });
-        if ( getIntent().getStringExtra("contactus").trim().equals("1")) {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.getString("contactus").trim().equals("1")) {
             // on first time display view for first nav item
             android.support.v4.app.Fragment fragment=new CompanyProjectsFragment();
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
@@ -161,7 +163,7 @@ public class AdressSearchActivity extends ActionBarActivity {
         }
         else  {
             // on first time display view for first nav item
-            android.support.v4.app.Fragment fragment=new EventLIstFragment();
+            android.support.v4.app.Fragment fragment=new SearchFragment();
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.content_event, fragment).commit();
@@ -302,9 +304,5 @@ public class AdressSearchActivity extends ActionBarActivity {
 //        return ((ActionBarActivity) getActivity()).getSupportActionBar();
 //    }
 }
-
-
-
-
 
 

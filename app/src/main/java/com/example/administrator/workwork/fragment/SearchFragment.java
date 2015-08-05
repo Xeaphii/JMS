@@ -49,7 +49,7 @@ public class SearchFragment extends Fragment {
     public List<Event> Sorteddata = null;
     ListView eventlistView;
     StorageSharedPref sharedStorage;
-    Button createevent;
+
     Button SearchButton;
     EditText SearchString;
     Spinner SelectionSpinner;
@@ -58,21 +58,8 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_adress_search, container, false);
         users=new ArrayList<String>();
-        createevent=(Button)v.findViewById(R.id.create_event_event_list_button);
-        createevent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CreateEventActivity.class);
-                startActivity(intent);
-            }
-        });
-        ((Button)v.findViewById(R.id.create_offer_list_button)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CreateOfferActivity.class);
-                startActivity(intent);
-            }
-        });
+
+
         eventlistView=(ListView)v.findViewById(R.id.event_listView);
 
         SearchButton = (Button) v.findViewById(R.id.bt_search);
@@ -82,30 +69,36 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String jobType = (String) SelectionSpinner.getSelectedItem();
-                if (!SearchString.getText().toString().equals("")) {
-                    String SearchStringS = SearchString.getText().toString().toString();
 
-                    data.clear();
-                    for(int i = 0 ; i < Sorteddata.size();i++){
-                        if(Sorteddata.get(i).getEventNmae().contains(SearchStringS)){
-                            if(jobType.equals("All")){
+                String SearchStringS = SearchString.getText().toString().toString();
+
+                data.clear();
+                for (int i = 0; i < Sorteddata.size(); i++) {
+                    if (SearchStringS.trim().equals("")) {
+                        if (jobType.equals("All")) {
+                            data.add(Sorteddata.get(i));
+                        } else if (Sorteddata.get(i).getEventType().equals(jobType)) {
+                            data.add(Sorteddata.get(i));
+                        }
+                    } else {
+                        if (Sorteddata.get(i).getEventNmae().toLowerCase().contains(SearchStringS.trim().toLowerCase())) {
+                            if (jobType.equals("All")) {
                                 data.add(Sorteddata.get(i));
-                            }else if(Sorteddata.get(i).getEventType().equals(jobType)){
+                            } else if (Sorteddata.get(i).getEventType().equals(jobType)) {
                                 data.add(Sorteddata.get(i));
                             }
                         }
                     }
-                    adapter.notifyDataSetChanged();
-                    adapter.notifyDataSetInvalidated();
                 }
-
+                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetInvalidated();
             }
         });
 
         // Gets the MapView from the XML layout and creates it
         setRetainInstance(true);
         data = new ArrayList<Event>();
-        Sorteddata = new ArrayList<Event>();
+       // Sorteddata = new ArrayList<Event>();
         sharedStorage = new StorageSharedPref(SearchFragment.this.getActivity());
         // Toast.makeText(EventLIstFragment.this.getActivity(),sharedStorage.GetPrefs("fb_account", null),Toast.LENGTH_LONG).show();
         if (isNetworkAvailable()) {
@@ -218,7 +211,7 @@ public class SearchFragment extends Fragment {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/PHP/UsersEvent.php?proj_event_id="+urls[0]).replaceAll(" ", "%20")
+                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/AllJobs.php")
 
                 );
                 HttpClient httpclient = new DefaultHttpClient();
@@ -256,6 +249,7 @@ public class SearchFragment extends Fragment {
                     eventlist.setEventID(EventResp[0]);
                     eventlist.setEventNmae(EventResp[1]);
                     eventlist.setEventContente(EventResp[6]);
+                    eventlist.setEventType(EventResp[4]);
                     //eventlist.setEventLocation((String) event.get("location"));
                     eventlist.setEventPosition(EventResp[5]);
                     eventlist.setEventTimestart(EventResp[2]);
@@ -267,7 +261,7 @@ public class SearchFragment extends Fragment {
                     } else {
 
                         if(EventResp[12].trim().equals("0")){
-                            eventlist.setEventUserimage("http://droidcube.move.pk/PHP/images/" + EventResp[7] + ".jpg");
+                            eventlist.setEventUserimage("http://droidcube.move.pk/JMS/images/" + EventResp[7] + ".jpg");
                         }else{
                             eventlist.setEventUserimage("https://graph.facebook.com/" +EventResp[7] + "/picture?type=large");
                             //eventlist.setEventUserimage("https://graph.facebook.com/" + sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");
@@ -276,7 +270,7 @@ public class SearchFragment extends Fragment {
                     data.add(eventlist);
 
                 }
-                Sorteddata = data;
+                Sorteddata = new ArrayList<Event>(data);
 
             }
             adapter = new EventAdapter(getActivity(),

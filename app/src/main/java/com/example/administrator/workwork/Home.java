@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -218,11 +219,11 @@ public class Home extends Fragment {
         protected Void doInBackground(Void... params) {
             // Create the array
             data = new ArrayList<Event>();
-            //http://droidcube.move.pk/PHP/EventsList.php
+            //http://droidcube.move.pk/JMS/EventsList.php
             try {
 
                 //------------------>>
-                HttpGet httppost = new HttpGet("http://droidcube.move.pk/PHP/EventsList.php");
+                HttpGet httppost = new HttpGet("http://droidcube.move.pk/JMS/EventsList.php");
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpResponse response = httpclient.execute(httppost);
 
@@ -231,29 +232,36 @@ public class Home extends Fragment {
 
                 if (status == 200) {
                     HttpEntity entity = response.getEntity();
-                    String[] RespData = EntityUtils.toString(entity).split(";");
+                    String resp = EntityUtils.toString(entity);
+                    String[] RespData =resp.split(";");
+
+                    Log.e("Error",resp);
                     for (int i = 0 ; i < RespData.length;i++) {
                         // Locate images in flag column
                         final Event eventlist = new Event();
                         String[] EvenetsEntry= RespData[i].split(":::");
-                        eventlist.setUserid(RespData[10]);
-                        eventlist.setEventID(RespData[0]);
-                        eventlist.setEventNmae(RespData[1]);
-                        eventlist.setEventContente(RespData[6]);
+                        eventlist.setUserid(EvenetsEntry[10]);
+                        eventlist.setEventID(EvenetsEntry[0]);
+                        eventlist.setEventNmae(EvenetsEntry[1]);
+                        eventlist.setEventContente(EvenetsEntry[6]);
                         //eventlist.setEventLocation((String) event.get("location"));
-                        eventlist.setEventPosition(RespData[10]);
-                        eventlist.setEventTimestart(RespData[2]);
-                        eventlist.setEventTimeend(RespData[3]);
-                        if (RespData[7].equals("")) {
+                        eventlist.setEventPosition(EvenetsEntry[10]);
+                        eventlist.setEventTimestart(EvenetsEntry[2]);
+                        eventlist.setEventTimeend(EvenetsEntry[3]);
+
+                        eventlist.setPosition_latitude( Double.parseDouble(EvenetsEntry[8]));
+                        eventlist.setPosition_longitude( Double.parseDouble(EvenetsEntry[9]));
+
+                        if (EvenetsEntry[7].equals("")) {
 
                             eventlist.setEventUserimage("");
 
                         } else {
 
-                            if (RespData[12].trim().equals("0")){
-                                eventlist.setEventUserimage("http://droidcube.move.pk/PHP/images/" + RespData[7] + ".jpg");
+                            if (EvenetsEntry[12].trim().equals("0")){
+                                eventlist.setEventUserimage("http://droidcube.move.pk/JMS/images/" + EvenetsEntry[7] + ".jpg");
                             }else{
-                                eventlist.setEventUserimage("https://graph.facebook.com/" +RespData[7] + "/picture?type=large");
+                                eventlist.setEventUserimage("https://graph.facebook.com/" +EvenetsEntry[7] + "/picture?type=large");
                                 //eventlist.setEventUserimage("https://graph.facebook.com/" + sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");
                             }
                         }
@@ -269,10 +277,11 @@ public class Home extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
             // Locate the listview in listview_main.xml
-            setDispalyEvent(data);
+
 
             // Close the progressdialog
             mProgressDialog.dismiss();
+            setDispalyEvent(data);
 
         }
     }

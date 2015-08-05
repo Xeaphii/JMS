@@ -196,7 +196,7 @@ public class SignIn extends Activity {
 
                 try {
                     //------------------>>
-                    HttpGet httppost = new HttpGet(("http://droidcube.move.pk/PHP/SignIn.php?proj_email=" +
+                    HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/SignIn.php?proj_email=" +
                             encodeHTML(urls[0]) +
                             "&proj_password=" +
                             encodeHTML(urls[1])).replaceAll(" ", "%20") );
@@ -263,7 +263,7 @@ public class SignIn extends Activity {
             }else{
                 try {
                     //------------------>>
-                    HttpGet httppost = new HttpGet(("http://droidcube.move.pk/PHP/FbLogin.php?proj_username=" +
+                    HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/FbLogin.php?proj_username=" +
                             encodeHTML(urls[0])+"" +
                             "&proj_email=" +
                             encodeHTML(urls[1]) +
@@ -346,7 +346,7 @@ public class SignIn extends Activity {
         try {
 
             //------------------>>
-            HttpGet httppost = new HttpGet(("http://droidcube.move.pk/PHP/user_name_validation.php?proj_username=" +
+            HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/user_name_validation.php?proj_username=" +
                     encodeHTML(userName)).replaceAll(" ", "%20"));
             HttpClient httpclient = new DefaultHttpClient();
             HttpResponse response = httpclient.execute(httppost);

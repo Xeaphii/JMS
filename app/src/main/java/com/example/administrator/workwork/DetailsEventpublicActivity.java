@@ -85,7 +85,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
         eventbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(DetailsEventpublicActivity.this,EventActivity.class);
+                Intent intent = new Intent(DetailsEventpublicActivity.this, EventActivity.class);
                 startActivity(intent);
             }
         });
@@ -99,14 +99,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
         event_location_textview=(TextView)findViewById(R.id.event_location_textView);
         event_description_textview=(TextView)findViewById(R.id.event_content_textView);
         RB = (RatingBar) findViewById(R.id.ratingBar);
-        RB.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                if (!RB.isClickable())
-                    new RateUpdate().execute(new String[]{eventID, String.valueOf(RB.getRating())});
-            }
 
-        });
 
         tv_title=(TextView)findViewById(R.id.textView4);
         tv_price=(TextView)findViewById(R.id.textView8);
@@ -467,14 +460,22 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
                 event_description_textview.setText(RespData[6]);
                 Titleview.setText(RespData[1]);
                 RB.setRating(Float.valueOf(RespData[12].trim()));
+                RB.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        if (!RB.isClickable())
+                            new RateUpdate().execute(new String[]{eventID, String.valueOf(RB.getRating())});
+                    }
+
+                });
                 if(RespData[10].trim().equals("0")){
                     tv_descp.setText("Job Description");
                     tv_price.setText("Job Rate");
-                    tv_title.setText("Job Title");
+                    tv_title.setText("Job Location");
                 }else{
                     tv_descp.setText("Offer Description");
                     tv_price.setText("Offer Rate");
-                    tv_title.setText("Offer Title");
+                    tv_title.setText("Offer Location");
                 }
             }
         }
@@ -530,16 +531,25 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
-            if(Resp.equals("200")){
+                if(Resp.equals("200")){
                 Toast.makeText(DetailsEventpublicActivity.this, "Job entry saved!", Toast.LENGTH_LONG).show();
                 cancle_button.setText("Cancel Job");
                 isJoined = true;
-            }else if(Resp.equals("404")){
+                    showHomeListActivity();
+                }else if(Resp.equals("404")){
                 Toast.makeText(DetailsEventpublicActivity.this, "Already enlisted in job", Toast.LENGTH_LONG).show();
                 cancle_button.setText("Cancel Job");
                 isJoined = false;
-            }
+                    showHomeListActivity();
+                }
         }
+    }
+    private void showHomeListActivity() {
+        Intent intent = new Intent(getApplicationContext(), Base.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish(); // This closes the login screen so it's not on the back stack
     }
     class CheckJoining extends AsyncTask<String, Void,String  > {
 

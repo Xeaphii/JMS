@@ -232,7 +232,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/job_descp_editText"
+                    android:id="@+id/event_content_editText"
                     android:textColor="#ff0fbc77"
                     android:singleLine="true"
                     android:inputType="textCapWords" />

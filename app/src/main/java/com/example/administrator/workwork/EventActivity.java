@@ -128,7 +128,8 @@ public class EventActivity extends ActionBarActivity {
                         .replace(R.id.content_event, fragment).commit();
             }
         });
-        if ( getIntent().getStringExtra("contactus").trim().equals("1")) {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.getString("contactus").trim().equals("1")) {
             // on first time display view for first nav item
             android.support.v4.app.Fragment fragment=new CompanyProjectsFragment();
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
