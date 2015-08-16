@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">WorkWork</string>
-    <string name="google_maps_key" templateMergeStrategy="preserve">AIzaSyDqXwOAhF8FY8tA_F6pkpNDpR4NnD-K_k4</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve">AIzaSyCJQaFO0_vHwhZXMp71F3dKNn0nocvJvZE</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="facebook_app_id">421280671395376</string>
+    <string name="facebook_app_id">1641522542769559</string>
     <string name="com_parse_ui_logo_content_description">Logo</string>
     <string name="com_parse_ui_progress_dialog_text">Loading...</string>
     <string name="com_parse_ui_username_input_hint">Username</string>
@@ -66,7 +66,7 @@
         <item>Home</item>
         <item>Profile</item>
         <item>Contact Us</item>
-        <item>Settings</item>
+        <item>Shop</item>
         <item>Log Out</item>
     </string-array>
     <string-array name="jobs_type">
@@ -94,6 +94,11 @@
         <item>@drawable/ic_communities</item>
         <item>@drawable/ic_pages</item>
     </array>
+    <string-array name="coins_purchase">
+        <item>Buy 10($0.99)</item>
+        <item>Buy 25($1.99)</item>
+        <item>Buy 50($4.99)</item>
+    </string-array>
     <string name="title_activity_event">EventActivity</string>
     <string name="title_activity_adress_search">AdressSearchActivity</string>
 </resources>

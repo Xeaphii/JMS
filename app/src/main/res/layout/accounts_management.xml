@@ -1,0 +1,76 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.raoul.eventapp.DetailsFragment">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:id="@+id/toolbar"
+        android:layout_height="50dp">
+        <ImageView
+            android:id="@+id/text_view_toolbar_title"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+
+            android:scaleType="fitXY"
+            android:src="@drawable/top_banner" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="20dp"
+        android:id="@+id/temp_id_2"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="Your remaining coins are:"/>
+        <TextView
+            android:id="@+id/tv_remaining_coins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_marginLeft="20dp"
+            android:textColor="#669900"
+            android:textStyle="bold"
+            android:text="100"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/temp_id_2"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/temp_id_3"
+            android:textSize="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:text="Choose your plan"/>
+        <Spinner
+            android:layout_marginTop="10dp"
+            android:id="@+id/plan_categories"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/temp_id_3"
+            android:layout_height="wrap_content"
+            android:entries="@array/coins_purchase" />
+        <Button
+            android:layout_width="fill_parent"
+
+            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content"
+            android:id="@+id/make_payment"
+            android:text="Proceed"/>
+    </RelativeLayout>
+
+</RelativeLayout>

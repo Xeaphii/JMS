@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.raoul.eventapp.DetailsFragment">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:id="@+id/toolbar"
+        android:layout_height="50dp">
+        <ImageView
+            android:id="@+id/text_view_toolbar_title"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+
+            android:scaleType="fitXY"
+            android:src="@drawable/top_banner" />
+        </LinearLayout>
+
+    <ListView
+        android:layout_below="@+id/toolbar"
+        android:id="@+id/interested_conv"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/temp_id"
+        android:layout_centerHorizontal="true"
+        android:background="#fff" />
+
+    <RelativeLayout
+        android:id="@+id/temp_id"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <EditText
+            android:id="@+id/message_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:lines="5"
+            android:maxLines="6"
+            android:minLines="4"
+            android:scrollbars="vertical" />
+    </RelativeLayout>
+    <Button
+        android:id="@+id/bt_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentRight="true"
+        android:text="Send"/>
+</RelativeLayout>

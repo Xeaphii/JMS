@@ -179,8 +179,8 @@ public class EventLIstFragment extends Fragment {
 
             try {
                 //------------------>>
-               // Log.e("Errpr","http://droidcube.move.pk/JMS/UsersEvent.php?proj_event_id="+urls[0]);
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/UsersEvent.php?proj_event_id="+urls[0]).replaceAll(" ", "%20")
+               // Log.e("Errpr","http://xeamphiil.co.nf/JMS/UsersEvent.php?proj_event_id="+urls[0]);
+                HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/UsersEvent.php?proj_event_id="+urls[0]).replaceAll(" ", "%20")
 
                 );
                 HttpClient httpclient = new DefaultHttpClient();
@@ -229,7 +229,7 @@ public class EventLIstFragment extends Fragment {
                 } else {
 
                     if(EventResp[12].trim().equals("0")){
-                        eventlist.setEventUserimage("http://droidcube.move.pk/JMS/images/" + EventResp[7] + ".jpg");
+                        eventlist.setEventUserimage("http://xeamphiil.co.nf/JMS/images/" + EventResp[7] + ".jpg");
                     }else{
                         eventlist.setEventUserimage("https://graph.facebook.com/" +EventResp[7] + "/picture?type=large");
                         //eventlist.setEventUserimage("https://graph.facebook.com/" + sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");

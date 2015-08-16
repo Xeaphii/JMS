@@ -83,6 +83,7 @@ public class CreateventFragment extends Fragment {
     GPSTracker gps;
     String eventID;
     String address;
+    TextView loc;
     String city;
     String search_adress;
     public static final String GOOGLE_GEOLOCATION_API_GET_COORDINATES = "https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=AIzaSyD478Y5RvbosbO4s34uRaukMwiPkBxJi5A";
@@ -110,6 +111,10 @@ public class CreateventFragment extends Fragment {
         event_end_time_textview=(TextView)v.findViewById(R.id.event_end_time_textView);
         event_content_edittext=(EditText)v.findViewById(R.id.event_content_editText);
         PaymentJob=(EditText)v.findViewById(R.id.job_payment_editText);
+
+        loc=(TextView) v.findViewById(R.id.event_location_editText);
+
+
         event_name_edittext=(EditText)v.findViewById(R.id.event_name_editText);
         event_location_edittext=(TextView)v.findViewById(R.id.event_location_editText);
         event_location_edittext.setOnClickListener(new View.OnClickListener() {
@@ -304,7 +309,8 @@ public class CreateventFragment extends Fragment {
                             ,position_latitude.toString(),
                             position_longitude.toString()
                             ,sharedStorage.GetPrefs("user_id", null)
-                            ,eventID});}
+                            ,eventID,
+                            loc.getText().toString()});}
                     else {
                         Toast.makeText(getActivity(), "No internet connection present", Toast.LENGTH_LONG).show();
                     }
@@ -323,7 +329,9 @@ public class CreateventFragment extends Fragment {
 
                                 ,position_latitude.toString(),
                                 position_longitude.toString()
-                                ,sharedStorage.GetPrefs("user_id", null)});
+                                ,sharedStorage.GetPrefs("user_id", null),
+                                loc.getText().toString()
+                        });
                     }
                     else {
                         Toast.makeText(getActivity(), "No internet connection present", Toast.LENGTH_LONG).show();
@@ -396,7 +404,7 @@ public class CreateventFragment extends Fragment {
             try {
 
                 //------------------>>
-                String Url = "http://droidcube.move.pk/JMS/CreateJob.php?eventNmae=" +
+                String Url = "http://xeamphiil.co.nf/JMS/CreateJob.php?eventNmae=" +
                         encodeHTML(urls[0]).replaceAll(" ", "%20") +
                         "&eventTimestart=" +
                         encodeHTML(urls[1]).replaceAll(" ", "%20") +
@@ -415,7 +423,9 @@ public class CreateventFragment extends Fragment {
                         "&position_longitude=" +
                         encodeHTML(urls[8]).replaceAll(" ", "%20") +
                         "&userid=" +
-                        encodeHTML(urls[9]).replaceAll(" ", "%20");
+                        encodeHTML(urls[9]).replaceAll(" ", "%20")+
+                        "&loc=" +
+                        encodeHTML(urls[10]).replaceAll(" ", "%20");
                 Log.e("Error",Url);
                 HttpGet httppost = new HttpGet(Url.replaceAll(" ","%20")
                         );
@@ -475,7 +485,7 @@ public class CreateventFragment extends Fragment {
             try {
 
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/UpdaetEvent.php?eventNmae=" +
+                HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/UpdaetEvent.php?eventNmae=" +
                         encodeHTML(urls[0]).replaceAll(" ", "%20") +
                         "&eventTimestart=" +
                         encodeHTML(urls[1]).replaceAll(" ", "%20") +
@@ -496,7 +506,9 @@ public class CreateventFragment extends Fragment {
                         "&userid=" +
                         encodeHTML(urls[9]).replaceAll(" ", "%20")
                          +"&eventID=" +
-                        encodeHTML(urls[10])).replaceAll(" ", "%20"));
+                        encodeHTML(urls[10])).replaceAll(" ", "%20")
+                        +"&loc=" +
+                        encodeHTML(urls[11]).replaceAll(" ", "%20"));
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpResponse response = httpclient.execute(httppost);
 

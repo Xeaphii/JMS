@@ -202,7 +202,7 @@ public class Profile extends Fragment {
             nameValuePairs.add(new BasicNameValuePair("ImageName", params[1] + ".jpg"));
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost("http://droidcube.move.pk/JMS/images/UploadImage.php");
+                HttpPost httppost = new HttpPost("http://xeamphiil.co.nf/JMS/images/UploadImage.php");
                 httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                 HttpResponse response = httpclient.execute(httppost);
                 String st = EntityUtils.toString(response.getEntity());
@@ -241,7 +241,7 @@ public class Profile extends Fragment {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/profile_details.php?proj_user_id=" +
+                HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/profile_details.php?proj_user_id=" +
                         encodeHTML(urls[0])).replaceAll(" ", "%20") );
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpResponse response = httpclient.execute(httppost);
@@ -296,7 +296,7 @@ public class Profile extends Fragment {
         }
         else {
             if(RespArray[5].trim().equals("0")){
-                imageLoader.DisplayImage("http://droidcube.move.pk/JMS/images/" + RespArray[4]+".jpg", profile_picuture);
+                imageLoader.DisplayImage("http://xeamphiil.co.nf/JMS/images/" + RespArray[4]+".jpg", profile_picuture);
             }else{
                 imageLoader.DisplayImage("https://graph.facebook.com/" + RespArray[4]  + "/picture?type=large", profile_picuture);
                 //eventlist.setEventUserimage("https://graph.facebook.com/" + sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");
@@ -367,7 +367,7 @@ public class Profile extends Fragment {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/updateProfile.php?proj_user_id=" +
+                HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/updateProfile.php?proj_user_id=" +
                         encodeHTML(urls[0]).replaceAll(" ", "%20") +
                         "&proj_display_name=" +
                         encodeHTML(urls[1]).replaceAll(" ", "%20") +
@@ -378,7 +378,7 @@ public class Profile extends Fragment {
                         "&proj_about=" +
                         encodeHTML(urls[4]).replaceAll(" ", "%20")
                 ));
-//                Log.e("Error","http://droidcube.move.pk/JMS/updateProfile.php?proj_user_id=" +
+//                Log.e("Error","http://xeamphiil.co.nf/JMS/updateProfile.php?proj_user_id=" +
 //                        encodeHTML(urls[0]).replaceAll(" ", "%20") +
 //                        "&proj_display_name=" +
 //                        encodeHTML(urls[1]).replaceAll(" ", "%20") +

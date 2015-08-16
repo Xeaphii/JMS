@@ -1,8 +1,11 @@
 package com.example.administrator.workwork;
 
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.os.AsyncTask;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -24,6 +27,14 @@ import com.example.administrator.workwork.adapter.NavDrawerListAdapter;
 import com.example.administrator.workwork.model.NavDrawerItem;
 import com.facebook.login.LoginManager;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -224,9 +235,10 @@ public class Base extends ActionBarActivity {
                 intentE.putExtra("contactus", "1");
                 startActivity(intentE);
                 break;
-//            case 3:
-//                fragment = new Setting();
-//                break;
+            case 3:
+                Intent intentAccount = new Intent(Base.this, AccountManagement.class);
+                startActivity(intentAccount);
+                break;
             case 4:
                 onLogoutButtonClicked();
                 break;

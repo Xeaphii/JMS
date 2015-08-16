@@ -164,12 +164,9 @@ public class Home extends Fragment {
                 }
 
                 else {
-
-
                     Intent zoom = new Intent(getActivity(), DetailsEventpublicActivity.class);
                     zoom.putExtra("eventID", id);
                     startActivity(zoom);
-
                 }
 
 
@@ -219,11 +216,11 @@ public class Home extends Fragment {
         protected Void doInBackground(Void... params) {
             // Create the array
             data = new ArrayList<Event>();
-            //http://droidcube.move.pk/JMS/EventsList.php
+            //http://xeamphiil.co.nf/JMS/EventsList.php
             try {
 
                 //------------------>>
-                HttpGet httppost = new HttpGet("http://droidcube.move.pk/JMS/EventsList.php");
+                HttpGet httppost = new HttpGet("http://xeamphiil.co.nf/JMS/EventsList.php");
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpResponse response = httpclient.execute(httppost);
 
@@ -259,7 +256,7 @@ public class Home extends Fragment {
                         } else {
 
                             if (EvenetsEntry[12].trim().equals("0")){
-                                eventlist.setEventUserimage("http://droidcube.move.pk/JMS/images/" + EvenetsEntry[7] + ".jpg");
+                                eventlist.setEventUserimage("http://xeamphiil.co.nf/JMS/images/" + EvenetsEntry[7] + ".jpg");
                             }else{
                                 eventlist.setEventUserimage("https://graph.facebook.com/" +EvenetsEntry[7] + "/picture?type=large");
                                 //eventlist.setEventUserimage("https://graph.facebook.com/" + sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");

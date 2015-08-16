@@ -196,7 +196,7 @@ public class SignIn extends Activity {
 
                 try {
                     //------------------>>
-                    HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/SignIn.php?proj_email=" +
+                    HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/SignIn.php?proj_email=" +
                             encodeHTML(urls[0]) +
                             "&proj_password=" +
                             encodeHTML(urls[1])).replaceAll(" ", "%20") );
@@ -258,18 +258,36 @@ public class SignIn extends Activity {
 
         @Override
         protected Integer doInBackground(String... urls) {
+            String url = ("http://xeamphiil.co.nf/JMS/FbLogin.php?proj_username=" +
+                    encodeHTML(urls[0])+"" +
+                    "&proj_email=" +
+                    encodeHTML(urls[1]) +
+                    "&proj_display_name=" +
+                    encodeHTML(urls[2])
+            ).replaceAll(" ", "%20");
             if(isFbUserExist(urls[0])) {
                      return 300;
             }else{
+                HttpClient client = new DefaultHttpClient();
+                HttpGet request = new HttpGet(url);
+
+                try {
+                    HttpResponse response = client.execute(request);
+                    HttpEntity entity = response.getEntity();
+
+                    //
+                    // Read the contents of an entity and return it as a String.
+                    //
+                    String content = EntityUtils.toString(entity);
+                    System.out.println(content);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 try {
                     //------------------>>
-                    HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/FbLogin.php?proj_username=" +
-                            encodeHTML(urls[0])+"" +
-                            "&proj_email=" +
-                            encodeHTML(urls[1]) +
-                            "&proj_display_name=" +
-                            encodeHTML(urls[2])
-                            ).replaceAll(" ", "%20") );
+
+                    HttpGet httppost = new HttpGet(url);
                     HttpClient httpclient = new DefaultHttpClient();
                     HttpResponse response = httpclient.execute(httppost);
 
@@ -278,7 +296,8 @@ public class SignIn extends Activity {
 
                     if (status == 200) {
                         HttpEntity entity = response.getEntity();
-                        String[] data = EntityUtils.toString(entity).split(":");
+                        String resp = EntityUtils.toString(entity);
+                        String[] data = resp.split(":");
                         if (data[0].equals("200")) {
                             sharedStorage.StorePrefs("user_id",data[1]);
                             return 200;
@@ -346,7 +365,7 @@ public class SignIn extends Activity {
         try {
 
             //------------------>>
-            HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/user_name_validation.php?proj_username=" +
+            HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/user_name_validation.php?proj_username=" +
                     encodeHTML(userName)).replaceAll(" ", "%20"));
             HttpClient httpclient = new DefaultHttpClient();
             HttpResponse response = httpclient.execute(httppost);

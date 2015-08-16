@@ -137,17 +137,18 @@
                 android:layout_gravity="center"
                 android:textColor="#ff0fbc77"
                 android:gravity="center" />
+
         </LinearLayout>
     </LinearLayout>
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/listView"
+        android:id="@+id/interested_cand_list"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/linearLayout"
         android:layout_above="@+id/linearLayout2"
-        android:background="#92121dff" />
+        android:background="#fff" />
 
 
     <LinearLayout

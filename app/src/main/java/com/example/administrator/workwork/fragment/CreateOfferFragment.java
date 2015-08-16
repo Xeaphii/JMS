@@ -40,6 +40,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -79,6 +80,7 @@ public class CreateOfferFragment extends Fragment {
     String adress_str;
     String name_str;
     Double position_latitude;
+    TextView loc;
     Double position_longitude;
     String content_str;
     String event_type;
@@ -112,6 +114,7 @@ public class CreateOfferFragment extends Fragment {
         event_end_time_textview=(TextView)v.findViewById(R.id.event_end_time_textView);
         event_content_edittext=(EditText)v.findViewById(R.id.event_content_editText);
         PaymentJob=(EditText)v.findViewById(R.id.job_payment_editText);
+        loc=(TextView)v.findViewById(R.id.event_location_editText);
         event_name_edittext=(EditText)v.findViewById(R.id.event_name_editText);
         event_location_edittext=(TextView)v.findViewById(R.id.event_location_editText);
         event_location_edittext.setOnClickListener(new View.OnClickListener() {
@@ -248,7 +251,7 @@ public class CreateOfferFragment extends Fragment {
 
                 position_latitude = gps.getLatitude();
                 position_longitude = gps.getLongitude();
-
+                
 
 
                 Geocoder geocoder;
@@ -305,7 +308,7 @@ public class CreateOfferFragment extends Fragment {
 
                             ,position_latitude.toString(),
                             position_longitude.toString()
-                            ,sharedStorage.GetPrefs("user_id", null),eventID});}
+                            ,sharedStorage.GetPrefs("user_id", null),eventID,loc.getText().toString()});}
                     else {
                         Toast.makeText(getActivity(), "No internet connection present", Toast.LENGTH_LONG).show();
                     }
@@ -324,7 +327,8 @@ public class CreateOfferFragment extends Fragment {
 
                                 ,position_latitude.toString(),
                                 position_longitude.toString()
-                                ,sharedStorage.GetPrefs("user_id", null)});
+                                ,sharedStorage.GetPrefs("user_id", null),
+                                loc.getText().toString()});
                     }
                     else {
                         Toast.makeText(getActivity(), "No internet connection present", Toast.LENGTH_LONG).show();
@@ -397,7 +401,7 @@ public class CreateOfferFragment extends Fragment {
             try {
 
                 //------------------>>
-                String Url = "http://droidcube.move.pk/JMS/CreateJob.php?eventNmae=" +
+                String Url = "http://xeamphiil.co.nf/JMS/CreateJob.php?eventNmae=" +
                         encodeHTML(urls[0]).replaceAll(" ", "%20") +
                         "&eventTimestart=" +
                         encodeHTML(urls[1]).replaceAll(" ", "%20") +
@@ -417,7 +421,8 @@ public class CreateOfferFragment extends Fragment {
                         encodeHTML(urls[8]).replaceAll(" ", "%20") +
                         "&userid=" +
                         encodeHTML(urls[9]).replaceAll(" ", "%20")+
-                        "&isOffer=1"
+                        "&isOffer=1&loc="+
+                        encodeHTML(urls[10]).replaceAll(" ", "%20")
                         ;
                 Log.e("Error",Url);
                 HttpGet httppost = new HttpGet(Url.replaceAll(" ","%20")
@@ -478,7 +483,7 @@ public class CreateOfferFragment extends Fragment {
             try {
 
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/UpdaetEvent.php?eventNmae=" +
+                HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/UpdaetEvent.php?eventNmae=" +
                         encodeHTML(urls[0]).replaceAll(" ", "%20") +
                         "&eventTimestart=" +
                         encodeHTML(urls[1]).replaceAll(" ", "%20") +
@@ -499,7 +504,9 @@ public class CreateOfferFragment extends Fragment {
                         "&userid=" +
                         encodeHTML(urls[9]).replaceAll(" ", "%20")
                         +"&eventID=" +
-                        encodeHTML(urls[11])).replaceAll(" ", "%20"));
+                        encodeHTML(urls[10])).replaceAll(" ", "%20")+"&loc="+
+                        encodeHTML(urls[11]).replaceAll(" ", "%20")
+                );
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpResponse response = httpclient.execute(httppost);
 

@@ -6,6 +6,16 @@ package com.example.administrator.workwork.model;
 public class Guest {
 
     String userid;
+
+    public String getJobId() {
+        return JobId;
+    }
+
+    public void setJobId(String jobId) {
+        JobId = jobId;
+    }
+
+    String JobId;
     String imageurl;
     String username;
 

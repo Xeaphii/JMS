@@ -57,6 +57,7 @@
             android:layout_marginLeft="30dp"
             android:hint="Displayname"
             android:textColor="#ff0fbc77"
+            android:enabled="false"
             android:singleLine="true"
             android:gravity="right"
             android:inputType="textCapWords" />
@@ -70,7 +71,7 @@
             android:layout_toRightOf="@+id/profile_picture_imageview"
             android:layout_toEndOf="@+id/profile_picture_imageview"
             android:layout_marginLeft="30dp"
-            android:hint="Name"
+            android:hint="Profession"
             android:textColor="#ff0fbc77"
             android:singleLine="true"
             android:gravity="right"
@@ -85,7 +86,7 @@
             android:layout_toRightOf="@+id/profile_picture_imageview"
             android:layout_toEndOf="@+id/profile_picture_imageview"
             android:layout_marginLeft="30dp"
-            android:hint="Age"
+            android:hint="Company"
             android:textColor="#ff0fbc77"
             android:singleLine="true"
             android:gravity="right" />

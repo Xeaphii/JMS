@@ -67,7 +67,9 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
     TextView Titleview;
     Button cancle_button;
     Boolean isJoined = false;
+    Button MessageClient;
     RatingBar RB;
+    String OwnerId="";
 
     String eventID;
 
@@ -104,8 +106,17 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
         tv_title=(TextView)findViewById(R.id.textView4);
         tv_price=(TextView)findViewById(R.id.textView8);
         tv_descp=(TextView)findViewById(R.id.textView10);
-
-
+        MessageClient = (Button) findViewById(R.id.message_button);
+        MessageClient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), Conversate.class);
+                i.putExtra("owner",OwnerId );
+                i.putExtra("worker", sharedStorage.GetPrefs("user_id", null));
+                startActivity(i);
+            }
+        });
+        new GetOwnerId().execute(new String[]{eventID});
         sharedStorage = new StorageSharedPref(DetailsEventpublicActivity.this);
         cancle_button=(Button)findViewById(R.id.cancle_button);
 
@@ -234,7 +245,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
 
             try {
 
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/RateUpdateJob.php?proj_user_id=" +
+                HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/RateUpdateJob.php?proj_user_id=" +
                         encodeHTML(urls[0]).replaceAll(" ", "%20") +
                         "&proj_rating=" +
                         encodeHTML(urls[1]).replaceAll(" ", "%20")
@@ -425,7 +436,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/EventDetails.php?proj_event_id=" +
+                HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/EventDetails.php?proj_event_id=" +
                         encodeHTML(urls[0])).replaceAll(" ", "%20"));
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpResponse response = httpclient.execute(httppost);
@@ -456,7 +467,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
             if(Resp!=null){
                 String[] RespData = Resp.split(":::");
                 event_time_textview.setText(RespData[5]);
-                event_location_textview.setText(RespData[8]+","+RespData[9]);
+                event_location_textview.setText(RespData[13]);
                 event_description_textview.setText(RespData[6]);
                 Titleview.setText(RespData[1]);
                 RB.setRating(Float.valueOf(RespData[12].trim()));
@@ -501,7 +512,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/JoinEvent.php?proj_event_id=" +
+                HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/JoinEvent.php?proj_event_id=" +
                         encodeHTML(urls[0]) +
                         "&proj_event_guest=" +
                         encodeHTML(urls[1])).replaceAll(" ", "%20") );
@@ -571,7 +582,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/CheckJoining.php?proj_event_id=" +
+                HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/CheckJoining.php?proj_event_id=" +
                         encodeHTML(urls[0]) +
                         "&proj_event_guest=" +
                         encodeHTML(urls[1])).replaceAll(" ", "%20") );
@@ -630,7 +641,7 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/CancelJoining.php?proj_event_id=" +
+                HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/CancelJoining.php?proj_event_id=" +
                         encodeHTML(urls[0]) +
                         "&proj_event_guest=" +
                         encodeHTML(urls[1])).replaceAll(" ", "%20") );
@@ -676,5 +687,52 @@ public class DetailsEventpublicActivity extends ActionBarActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    class GetOwnerId extends AsyncTask<String, Void,String  > {
+
+
+        public GetOwnerId () {
+
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+
+            try {
+                //------------------>>
+                HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/GetOwnerId.php?proj_job_iid=" +
+                        encodeHTML(urls[0])));
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpResponse response = httpclient.execute(httppost);
+
+                // StatusLine stat = response.getStatusLine();
+                int status = response.getStatusLine().getStatusCode();
+
+                if (status == 200) {
+                    HttpEntity entity = response.getEntity();
+                    return  EntityUtils.toString(entity);
+
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final String Resp) {
+
+            OwnerId = Resp;
+        }
     }
 }

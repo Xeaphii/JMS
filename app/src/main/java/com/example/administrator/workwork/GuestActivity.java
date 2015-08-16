@@ -68,12 +68,10 @@ public class GuestActivity extends ActionBarActivity {
     private ArrayList<NavDrawerItem> navDrawerItems;
     private NavDrawerListAdapter adapter;
     public static FragmentManager fragmentManager;
-    ProgressDialog mProgressDialog;
     private GuestAdapter guestadapter;
     public List<Guest> data = null;
     ListView guestlistView;
     String EvendID;
-    Button createevent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -413,7 +411,7 @@ public class GuestActivity extends ActionBarActivity {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/GuestsList.php?proj_event_id=" +
+                HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/InterestedCandidates.php?proj_job_id=" +
                         encodeHTML(urls[0])).replaceAll(" ", "%20")
                 );
                 HttpClient httpclient = new DefaultHttpClient();
@@ -453,7 +451,7 @@ public class GuestActivity extends ActionBarActivity {
                         //guestlist.setImageurl(GuestResp[2]);
 
                         if(GuestResp[3].trim().equals("0")){
-                            guestlist.setImageurl("http://droidcube.move.pk/JMS/images/" + GuestResp[2] + ".jpg");
+                            guestlist.setImageurl("http://xeamphiil.co.nf/JMS/images/" + GuestResp[2] + ".jpg");
                         }else{
                             guestlist.setImageurl("https://graph.facebook.com/" + GuestResp[2] + "/picture?type=large");
                             //eventlist.setEventUserimage("https://graph.facebook.com/" + sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");
@@ -505,7 +503,7 @@ public class GuestActivity extends ActionBarActivity {
         return out.toString();
     }
 
-//http://droidcube.move.pk/JMS/GuestsList.php?proj_event_id=2
+//http://xeamphiil.co.nf/JMS/GuestsList.php?proj_event_id=2
 
 //    private ActionBar getActionBar() {
 //        return ((ActionBarActivity) getActivity()).getSupportActionBar();

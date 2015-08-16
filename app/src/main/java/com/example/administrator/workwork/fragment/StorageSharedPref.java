@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
 public class StorageSharedPref {
     private static final String MY_PREFS_NAME = "MyPrefsFile";
     Context c;
-    StorageSharedPref(Context con){
+    public StorageSharedPref(Context con){
         this.c = con;
     }
     public void StorePrefs(String key, String value){

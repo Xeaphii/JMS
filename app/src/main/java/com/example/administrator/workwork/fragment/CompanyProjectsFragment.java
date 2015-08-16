@@ -183,7 +183,7 @@ public class CompanyProjectsFragment extends Fragment {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/CompanyProjects.php?proj_event_id="+urls[0]).replaceAll(" ", "%20")
+                HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/CompanyProjects.php?proj_event_id="+urls[0]).replaceAll(" ", "%20")
 
                 );
                 HttpClient httpclient = new DefaultHttpClient();
@@ -232,7 +232,7 @@ public class CompanyProjectsFragment extends Fragment {
                     } else {
 
                         if(EventResp[12].trim().equals("0")){
-                            eventlist.setEventUserimage("http://droidcube.move.pk/JMS/images/" + EventResp[7] + ".jpg");
+                            eventlist.setEventUserimage("http://xeamphiil.co.nf/JMS/images/" + EventResp[7] + ".jpg");
                         }else{
                             eventlist.setEventUserimage("https://graph.facebook.com/" +EventResp[7] + "/picture?type=large");
                             //eventlist.setEventUserimage("https://graph.facebook.com/" + sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");

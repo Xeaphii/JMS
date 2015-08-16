@@ -211,7 +211,7 @@ public class SearchFragment extends Fragment {
 
             try {
                 //------------------>>
-                HttpGet httppost = new HttpGet(("http://droidcube.move.pk/JMS/AllJobs.php")
+                HttpGet httppost = new HttpGet(("http://xeamphiil.co.nf/JMS/AllJobs.php")
 
                 );
                 HttpClient httpclient = new DefaultHttpClient();
@@ -261,7 +261,7 @@ public class SearchFragment extends Fragment {
                     } else {
 
                         if(EventResp[12].trim().equals("0")){
-                            eventlist.setEventUserimage("http://droidcube.move.pk/JMS/images/" + EventResp[7] + ".jpg");
+                            eventlist.setEventUserimage("http://xeamphiil.co.nf/JMS/images/" + EventResp[7] + ".jpg");
                         }else{
                             eventlist.setEventUserimage("https://graph.facebook.com/" +EventResp[7] + "/picture?type=large");
                             //eventlist.setEventUserimage("https://graph.facebook.com/" + sharedStorage.GetPrefs("fb_account", null) + "/picture?type=large");
